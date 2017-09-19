@@ -107,9 +107,6 @@ public class group39 implements ContestSubmission
             evals++;
             // Select survivors
         }
-  //       for(int i = 0; i < 10; i++) {
-  //   		System.out.println(population.get(0)[i]);
-		// }
-        
+        System.out.println("Done!");
 	}
 }
