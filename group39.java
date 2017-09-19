@@ -13,9 +13,6 @@ public class group39 implements ContestSubmission
 
 	private static final int dimensions = 10;
 
-	private int pop_count = 100;
-	private ArrayList<double[]> population = new ArrayList<double[]>(); 
-
     private int evaluations_limit_;
 	
 	public group39()
@@ -50,14 +47,6 @@ public class group39 implements ContestSubmission
         }else{
             // Do sth else
         }
-    }
-
-    private double[] createMember(){
-    	double[] member = new double[dimensions];
-    	for(int i = 0; i < dimensions; i++) {
-    		member[i] = rnd_.nextDouble();
-		}
-		return member;
     }
 
 
