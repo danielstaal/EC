@@ -50,7 +50,7 @@ public class RealGenotype {
     public void setMutationP(float newP){this.mutationP=newP;}
     public float getMutationP(){return this.mutationP;}
     public double[] getValue(){return value;}
-    //TODO: check this funciton
+    //TODO: check this function
     public RealGenotype mutate(double lo, double hi){
         Random r = new Random();
         for(int i = 0; i < RealGenotype.D; i++){
