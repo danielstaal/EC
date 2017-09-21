@@ -9,7 +9,7 @@ import java.lang.Math;
 public class group39 implements ContestSubmission
 {
 	Random rnd_;
-	ContestEvaluation evaluation_;
+    ContestEvaluation evaluation_;
 
 	private static final int dimensions = 10;
 
@@ -50,20 +50,20 @@ public class group39 implements ContestSubmission
     }
 
 
-    private double convexScore(){
-    	double score = 0.0;
-    	for(int i=0;i<pop_count-1;i++){
-    		double[] member1 = population.get(i);
-    		double[] member2 = population.get(i+1);
-    		double fitness1 = (double) evaluation_.evaluate(member1);
-    		double fitness2 = (double) evaluation_.evaluate(member2);
+    // private double convexScore(){
+    // 	double score = 0.0;
+    // 	for(int i=0;i<pop_count-1;i++){
+    // 		double[] member1 = population.get(i);
+    // 		double[] member2 = population.get(i+1);
+    // 		double fitness1 = (double) evaluation_.evaluate(member1);
+    // 		double fitness2 = (double) evaluation_.evaluate(member2);
 
-    		// score is high when close members have a large difference in fitness
-    		score += Math.abs(fitness1-fitness2) / distance(member1,member2);
-    	}
-    	System.out.println("convexscore = " + score);
-    	return score;
-    }
+    // 		// score is high when close members have a large difference in fitness
+    // 		score += Math.abs(fitness1-fitness2) / distance(member1,member2);
+    // 	}
+    // 	System.out.println("convexscore = " + score);
+    // 	return score;
+    // }
 
     private double distance(double[] coor1, double[] coor2){
     	double distance = 0.0;
@@ -75,26 +75,30 @@ public class group39 implements ContestSubmission
     
 	public void run()
 	{
+
+        Population population = new Population(100, evaluation_);
+
+        population.nextGeneration();
+
+
 		// Run your algorithm here
         
-        int evals = 0;
+        // int evals = 0;
         // System.out.println(evaluations_limit_);
         // init population
-        for(int i=0;i<pop_count;i++){
-        	population.add(createMember());
-        }
-        convexScore();
+
+        // convexScore();
 
         // calculate fitness
-        while(evals<evaluations_limit_-1000){
+        // while(evals<evaluations_limit_-1000){
             // Select parents
             // Apply crossover / mutation operators
             // double child[] = {0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0};
             // Check fitness of unknown fuction
-            Double fitness = (double) evaluation_.evaluate(population.get(0));
+            // Double fitness = (double) evaluation_.evaluate(population.get(0));
 
-            evals++;
+            // evals++;
             // Select survivors
-        }
+        // }
 	}
 }
