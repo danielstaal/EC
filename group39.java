@@ -77,9 +77,10 @@ public class group39 implements ContestSubmission
 	{
 
         Population population = new Population(100, evaluation_);
-
-        population.nextGeneration();
-
+        for(int i=0;i<110;i++){
+            population.nextGeneration();   
+        }
+        
 
 		// Run your algorithm here
         

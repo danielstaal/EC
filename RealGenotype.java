@@ -94,7 +94,9 @@ public class RealGenotype {
     public RealGenotype mutate(double sigma){
         Random r = new Random();
         for(int i = 0; i < RealGenotype.D; i++){
-            this.value[i] += r.nextGaussian()*sigma;
+            do{
+                this.value[i] += r.nextGaussian()*sigma;
+               } while (Math.abs(this.value[i])>5);
         }
         return this;
     }
@@ -102,7 +104,8 @@ public class RealGenotype {
      * 1-point crossover breeding function
      **/
     public static RealGenotype breed1(RealGenotype mom, RealGenotype dad){
-	int cut = r.nextInt(10);
+	Random r = new Random();
+    int cut = r.nextInt(10);
 	RealGenotype kid = new RealGenotype();
 	for(int i=0; i<kid.getValue().length; i++){
 	    if(i<cut){
@@ -121,8 +124,9 @@ public class RealGenotype {
      **/
     public static RealGenotype breed2(RealGenotype mom, RealGenotype dad){
 	RealGenotype kid = new RealGenotype();
+    Random r = new Random();
 	for(int i=0; i<kid.getValue().length; i++){
-	    if(r.nextDouble() <= mom.getfitness()/(mom.getFitness()+dad.getFitness())){
+	    if(r.nextDouble() <= mom.getFitness()/(mom.getFitness()+dad.getFitness())){
 		kid.getValue()[i] = mom.getValue()[i];
 	    } else{
 		kid.getValue()[i] = dad.getValue()[i];
