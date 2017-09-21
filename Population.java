@@ -1,31 +1,32 @@
-
-
+import java.util.ArrayList;
+import java.util.Random;
 
 public class Population
 {
 	private int popCount;
-	private ArrayList<realGenotype> population = new ArrayList<realGenotype>(); 
+	private ArrayList<RealGenotype> population = new ArrayList<RealGenotype>();
 
 	public Population(int popcount){
 		popCount = popcount;
 		createPopulation();
 	}
 
-	private createPopulation(){
+	private void createPopulation(){
 		for(int i=0;i<popCount;i++){
-        	population.add(realGenotype());
+        	//population.add(RealGenotype);
         }
 	}
 
     private double[] createMember(){
-    	double[] member = new double[dimensions];
-    	for(int i = 0; i < dimensions; i++) {
+		Random rnd_ = new Random();
+    	double[] member = new double[RealGenotype.D];
+    	for(int i = 0; i < RealGenotype.D; i++) {
     		member[i] = rnd_.nextDouble();
 		}
 		return member;
     }
 
-    public ArrayList<realGenotype> getPopulation(){
+    public ArrayList<RealGenotype> getPopulation(){
     	return population;
     }
 

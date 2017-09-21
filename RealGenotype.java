@@ -102,16 +102,17 @@ public class RealGenotype {
      * 1-point crossover breeding function
      **/
     public static RealGenotype breed1(RealGenotype mom, RealGenotype dad){
-	int cut = r.nextInt(10);
-	RealGenotype kid = new RealGenotype();
-	for(int i=0; i<kid.getValue().length; i++){
-	    if(i<cut){
-		kid.getValue()[i] = mom.getValue()[i];
-	    } else{
-		kid.getValue()[i] = dad.getValue()[i];
-	    }
-	}
-	return kid;
+        Random r = new Random();
+        int cut = r.nextInt(10);
+        RealGenotype kid = new RealGenotype();
+        for(int i=0; i<kid.getValue().length; i++){
+            if(i<cut){
+            kid.getValue()[i] = mom.getValue()[i];
+            } else{
+            kid.getValue()[i] = dad.getValue()[i];
+            }
+        }
+        return kid;
     }
     /**
      * Takes  two RealGenotypes that act as parents and returns a
@@ -120,24 +121,16 @@ public class RealGenotype {
      * Chance of allel of mom being selected: fitness(mom)/(fitness(mom)+fitness(dad))
      **/
     public static RealGenotype breed2(RealGenotype mom, RealGenotype dad){
-	RealGenotype kid = new RealGenotype();
-	for(int i=0; i<kid.getValue().length; i++){
-	    if(r.nextDouble() <= mom.getfitness()/(mom.getFitness()+dad.getFitness())){
-		kid.getValue()[i] = mom.getValue()[i];
-	    } else{
-		kid.getValue()[i] = dad.getValue()[i];
-	    }
-	}
-	return kid;
-    }	
-    public static void main(String[] args){
-        System.out.println("Testing Genotype");
-        RealGenotype[] genes = new RealGenotype[10];
-        for(int i = 0; i < 10; i++){
-            genes[i] = new RealGenotype(-100, 100);
-            System.out.println(genes[i]);
+        Random r = new Random();
+        RealGenotype kid = new RealGenotype();
+        for(int i=0; i<kid.getValue().length; i++){
+            if(r.nextDouble() <= mom.getFitness()/(mom.getFitness()+dad.getFitness())){
+            kid.getValue()[i] = mom.getValue()[i];
+            } else{
+            kid.getValue()[i] = dad.getValue()[i];
+            }
         }
-        System.exit(1);
+        return kid;
     }
 }
 
