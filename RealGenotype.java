@@ -12,12 +12,14 @@ public class RealGenotype {
     public static final double DOMAIN_HI = 5;
     public static final double DOMAIN_LO = -5;
     private double[] value;
+    private double fitness;
     //non static, so that different individuals can mutate at different rates
     private float mutationP = 1/RealGenotype.D;
     /**
      * Empty constructor. Creates a genotype with double values uniformly distributed in [0, 1]
      * */
     public RealGenotype() {
+	this.fitness = -1;
         Random r = new Random();
         value = new double[RealGenotype.D];
         for(int i = 0; i < RealGenotype.D; i++){
@@ -32,6 +34,7 @@ public class RealGenotype {
      * [RealGenotype.DOMAIN_LO, RealGenotype.DOMAIN_HI]
      * */
     public RealGenotype(double valueRangeLo, double valueRangeHi){
+	this.fitness = -1;
         if(valueRangeHi > RealGenotype.DOMAIN_HI || valueRangeLo < RealGenotype.DOMAIN_LO ||
                 valueRangeHi <= RealGenotype.DOMAIN_LO){
             //TODO: do this with a Logger instead: http://www.vogella.com/tutorials/Logging/article.html
@@ -50,6 +53,7 @@ public class RealGenotype {
      * Copy constructor. Creates a genotype with a given value
      * */
     public RealGenotype(double[] gen){
+	this.fitness = -1;
         assert (gen.length == RealGenotype.D);
         for(int i = 0; i < RealGenotype.D; i++){
             assert(RealGenotype.DOMAIN_LO <= gen[i] && gen[i] <= RealGenotype.DOMAIN_HI);
@@ -69,6 +73,8 @@ public class RealGenotype {
     public void setMutationP(float newP){this.mutationP=newP;}
     public float getMutationP(){return this.mutationP;}
     public double[] getValue(){return value;}
+    public double getFitness(){return this.fitness;}
+    public void setFitness(double fitness){this.fitness = fitness;}
     /**
      * Uniform mutation. Each allele has mutationP probability of being changed to a new value, uniformly
      * distributed in [lo, hi]
@@ -92,7 +98,38 @@ public class RealGenotype {
         }
         return this;
     }
-
+    /** 
+     * 1-point crossover breeding function
+     **/
+    public static RealGenotype breed1(RealGenotype mom, RealGenotype dad){
+	int cut = r.nextInt(10);
+	RealGenotype kid = new RealGenotype();
+	for(int i=0; i<kid.getValue().length; i++){
+	    if(i<cut){
+		kid.getValue()[i] = mom.getValue()[i];
+	    } else{
+		kid.getValue()[i] = dad.getValue()[i];
+	    }
+	}
+	return kid;
+    }
+    /**
+     * Takes  two RealGenotypes that act as parents and returns a
+     * RealGenotype kid that is a combination of both parents. An allel of a parent
+     * is selected with a probability based on the fitness of that parent. 
+     * Chance of allel of mom being selected: fitness(mom)/(fitness(mom)+fitness(dad))
+     **/
+    public static RealGenotype breed2(RealGenotype mom, RealGenotype dad){
+	RealGenotype kid = new RealGenotype();
+	for(int i=0; i<kid.getValue().length; i++){
+	    if(r.nextDouble() <= mom.getfitness()/(mom.getFitness()+dad.getFitness())){
+		kid.getValue()[i] = mom.getValue()[i];
+	    } else{
+		kid.getValue()[i] = dad.getValue()[i];
+	    }
+	}
+	return kid;
+    }	
     public static void main(String[] args){
         System.out.println("Testing Genotype");
         RealGenotype[] genes = new RealGenotype[10];
@@ -103,3 +140,16 @@ public class RealGenotype {
         System.exit(1);
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
