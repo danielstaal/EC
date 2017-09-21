@@ -34,7 +34,7 @@ public class Population
 		System.out.println(population.get(99).getFitness());
 		// System.out.println(Arrays.toString(sel));
 		// recombination, mutation
-		recombination();
+		recombinationAndMutation();
 		
 
 
@@ -67,7 +67,7 @@ public class Population
 		population.sort(Comparator.comparing(RealGenotype::getFitness));
 	}
 
-	private void recombination(){
+	private void recombinationAndMutation(){
 		Random r = new Random();
 		ArrayList<RealGenotype> new_population = new ArrayList<>();
 		int mom_idx = 0;
