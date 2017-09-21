@@ -3,13 +3,12 @@ import org.vu.contest.ContestEvaluation;
 
 import java.util.Random;
 import java.util.Properties;
-import java.util.ArrayList;
 import java.lang.Math;
 
 public class group39 implements ContestSubmission
 {
 	Random rnd_;
-	ContestEvaluation evaluation_;
+    ContestEvaluation evaluation_;
 
 	private static final int dimensions = 10;
 
@@ -59,22 +58,28 @@ public class group39 implements ContestSubmission
     
 	public void run()
 	{
+
+        Population population = new Population(100, evaluation_);
+        for(int i=0;i<110;i++){
+            population.nextGeneration();   
+        }
+        
+
 		// Run your algorithm here
         
-        int evals = 0;
+        // int evals = 0;
         // System.out.println(evaluations_limit_);
         // init population
 
         // calculate fitness
-        while(evals<evaluations_limit_-1000){
+        // while(evals<evaluations_limit_-1000){
             // Select parents
             // Apply crossover / mutation operators
             // double child[] = {0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0};
             // Check fitness of unknown fuction
-            //Double fitness = (double) evaluation_.evaluate(population.get(0));
 
-            evals++;
+            // evals++;
             // Select survivors
-        }
+        // }
 	}
 }

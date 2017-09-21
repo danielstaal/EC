@@ -79,11 +79,11 @@ public class RealGenotype {
      * Uniform mutation. Each allele has mutationP probability of being changed to a new value, uniformly
      * distributed in [lo, hi]
      * */
-    public RealGenotype mutate(double lo, double hi){
+    public RealGenotype mutate(){
         Random r = new Random();
         for(int i = 0; i < RealGenotype.D; i++){
             if(r.nextFloat() < this.mutationP)
-                this.value[i] = (hi - lo)*r.nextDouble() + lo;
+                this.value[i] = (RealGenotype.DOMAIN_HI - RealGenotype.DOMAIN_LO)*r.nextDouble() + RealGenotype.DOMAIN_LO;
         }
         return this;
     }
@@ -94,7 +94,9 @@ public class RealGenotype {
     public RealGenotype mutate(double sigma){
         Random r = new Random();
         for(int i = 0; i < RealGenotype.D; i++){
-            this.value[i] += r.nextGaussian()*sigma;
+            do{
+                this.value[i] += r.nextGaussian()*sigma;
+               } while (Math.abs(this.value[i])>5);
         }
         return this;
     }
@@ -121,8 +123,8 @@ public class RealGenotype {
      * Chance of allel of mom being selected: fitness(mom)/(fitness(mom)+fitness(dad))
      **/
     public static RealGenotype breed2(RealGenotype mom, RealGenotype dad){
-        Random r = new Random();
         RealGenotype kid = new RealGenotype();
+        Random r = new Random();
         for(int i=0; i<kid.getValue().length; i++){
             if(r.nextDouble() <= mom.getFitness()/(mom.getFitness()+dad.getFitness())){
             kid.getValue()[i] = mom.getValue()[i];
