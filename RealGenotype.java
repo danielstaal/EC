@@ -92,11 +92,13 @@ public class RealGenotype {
      * deviation
      * */
     public RealGenotype mutate(double sigma){
-        Random r = new Random();
-        for(int i = 0; i < RealGenotype.D; i++){
-            do{
-                this.value[i] += r.nextGaussian()*sigma;
-               } while (Math.abs(this.value[i])>5);
+	Random r = new Random(); 
+	for(int i = 0; i < RealGenotype.D; i++){
+	    if(r.nextDouble()<0.25){
+		do{
+		    this.value[i] += r.nextGaussian()*sigma;
+		} while (Math.abs(this.value[i])>5);
+	    }
         }
         return this;
     }
