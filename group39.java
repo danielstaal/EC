@@ -11,8 +11,10 @@ public class group39 implements ContestSubmission
     ContestEvaluation evaluation_;
 
 	private static final int dimensions = 10;
-
     private int evaluations_limit_;
+
+    private String evaluationType = "";
+
 	
 	public group39()
 	{
@@ -42,9 +44,11 @@ public class group39 implements ContestSubmission
 
 		// Do sth with property values, e.g. specify relevant settings of your algorithm
         if(isMultimodal){
-            // Do sth
+            evaluationType = "Multimodal";
+        }else if(hasStructure){
+            evaluationType = "Regular";
         }else{
-            // Do sth else
+            evaluationType = "Separable";
         }
     }
 
@@ -59,8 +63,8 @@ public class group39 implements ContestSubmission
 	public void run()
 	{
 
-        Population population = new Population(100, evaluation_);
-        for(int i=0;i<110;i++){
+        Population population = new Population(evaluationType, evaluation_, evaluations_limit_);
+        for(int i=0;i<population.getNoOfGenerations();i++){
             population.nextGeneration();   
         }
         

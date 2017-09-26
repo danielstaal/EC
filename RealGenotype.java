@@ -19,7 +19,7 @@ public class RealGenotype {
      * Empty constructor. Creates a genotype with double values uniformly distributed in [0, 1]
      * */
     public RealGenotype() {
-	this.fitness = -1;
+    this.fitness = -1;
         Random r = new Random();
         value = new double[RealGenotype.D];
         for(int i = 0; i < RealGenotype.D; i++){
@@ -34,7 +34,7 @@ public class RealGenotype {
      * [RealGenotype.DOMAIN_LO, RealGenotype.DOMAIN_HI]
      * */
     public RealGenotype(double valueRangeLo, double valueRangeHi){
-	this.fitness = -1;
+    this.fitness = -1;
         if(valueRangeHi > RealGenotype.DOMAIN_HI || valueRangeLo < RealGenotype.DOMAIN_LO ||
                 valueRangeHi <= RealGenotype.DOMAIN_LO){
             //TODO: do this with a Logger instead: http://www.vogella.com/tutorials/Logging/article.html
@@ -53,7 +53,7 @@ public class RealGenotype {
      * Copy constructor. Creates a genotype with a given value
      * */
     public RealGenotype(double[] gen){
-	this.fitness = -1;
+    this.fitness = -1;
         assert (gen.length == RealGenotype.D);
         for(int i = 0; i < RealGenotype.D; i++){
             assert(RealGenotype.DOMAIN_LO <= gen[i] && gen[i] <= RealGenotype.DOMAIN_HI);
@@ -92,13 +92,13 @@ public class RealGenotype {
      * deviation
      * */
     public RealGenotype mutate(double sigma){
-	Random r = new Random(); 
-	for(int i = 0; i < RealGenotype.D; i++){
-	    if(r.nextDouble()<0.25){
-		do{
-		    this.value[i] += r.nextGaussian()*sigma;
-		} while (Math.abs(this.value[i])>5);
-	    }
+    Random r = new Random(); 
+    for(int i = 0; i < RealGenotype.D; i++){
+        if(r.nextDouble()<0.25){
+        do{
+            this.value[i] += r.nextGaussian()*sigma;
+        } while (Math.abs(this.value[i])>5);
+        }
         }
         return this;
     }
