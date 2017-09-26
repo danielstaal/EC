@@ -11,6 +11,8 @@ public class Population
 	private double evaluationLimit = 0.0;
 	ContestEvaluation evaluation_;
 
+    private static Random r = new Random();
+
 	//////// hyperparameters to be set according to the type of function
     int populationSize = 0;
     int noOfGenerations = 0;
@@ -52,15 +54,19 @@ public class Population
 	private void initPopulation(){
 		for(int i=0;i<populationSize;i++){
         	population.add(new RealGenotype(-5,5));
-        }
-	}
 
-	public void nextGeneration(){
+        }
+    }
+
+    public void nextGeneration(){
+		// Selection
 		selection();
-		// System.out.println(population.get(populationSize-1).getFitness());
 		// System.out.println(Arrays.toString(sel));
-		recombinationAndMutation();
-	}
+		// recombination, mutation
+		recombine();
+		mutate();
+			
+    }
 
 	private void selection(){
 		for(int i=0;i<populationSize-noOfSurvivors;i++){
@@ -71,33 +77,35 @@ public class Population
 		population.sort(Comparator.comparing(RealGenotype::getFitness));
 	}
 
-	private void recombinationAndMutation(){
-		Random r = new Random();
+    private void recombine(){
 		ArrayList<RealGenotype> new_population = new ArrayList<>();
 		int mom_idx = 0;
 		int dad_idx = 0;
 		for(int i=0;i<populationSize - noOfSurvivors;i++){
-			do{
-				mom_idx = (populationSize-1) - (int) Math.abs(r.nextGaussian()*selection_std);
-			} while (mom_idx < 0);
-			do{
-				dad_idx = (populationSize-1) - (int) Math.abs(r.nextGaussian()*selection_std);
-			} while (mom_idx == dad_idx || dad_idx < 0);
-
-			RealGenotype child = RealGenotype.breed2(population.get(mom_idx), population.get(dad_idx));
-			
-			// add mutation
-			child.mutate(0.5);
-
-			new_population.add(child);
-		}
-		// add the parents to the next generation
+		    do{
+			mom_idx = (populationSize-1) - (int) Math.abs(r.nextGaussian()*selection_std);
+		    } while (mom_idx < 0);
+		    do{
+			dad_idx = (populationSize-1) - (int) Math.abs(r.nextGaussian()*selection_std);
+		    } while (mom_idx == dad_idx || dad_idx < 0);
+		    // System.out.println(mom_idx);
+		    RealGenotype child = RealGenotype.breed2(population.get(mom_idx), population.get(dad_idx));
+				
+		    new_population.add(child);
+	}
+		// add parents to the population
 		for(int i=populationSize-noOfSurvivors;i<populationSize;i++){
-			new_population.add(population.get(i));
+		    new_population.add(population.get(i));
 		}
 		population = new_population;
-	}
-
+    }
+    
+    public void mutate(){
+		for(int i=noOfSurvivors;i<populationSize;i++){
+		    population.get(i).mutate(0.5);
+		}
+    }
+    
     public ArrayList<RealGenotype> getPopulation(){
     	return population;
     }
