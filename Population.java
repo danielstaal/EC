@@ -24,46 +24,23 @@ public class Population
 
 	private void initPopulation(){
 		for(int i=0;i<popCount;i++){
-        	population.add(new RealGenotype());
+        	population.add(new RealGenotype(-5,5));
         }
 	}
 
 	public void nextGeneration(){
-		// Selection
 		selection();
 		System.out.println(population.get(99).getFitness());
 		// System.out.println(Arrays.toString(sel));
-		// recombination, mutation
 		recombinationAndMutation();
-		
-
-
 	}
 
 	private void selection(){
-		// double[] fitnesses = new double[popCount];
 		for(int i=0;i<popCount-noOfSurvivors;i++){
-			// System.out.println(population.size());
-			// System.out.println(i);
-			// population.get(i).getValue();
 			population.get(i).setFitness((double) evaluation_.evaluate(population.get(i).getValue()));
 		}
-		// // maybe this should be a deep copy
-		// double[] temp = fitnesses.clone();
-		// Arrays.sort(fitnesses);
-		// int[] fittestMembers = new int[noOfSurvivors];
-
-		// // find original index
-		// // TODO: really badly written code with too many for loops, change this
-		// for(int i=0;i<noOfSurvivors;i++){
-		// 	for(int j=0;j<fitnesses.length;j++){
-		// 		if(fitnesses[i] == temp[j]){
-		// 			fittestMembers[i] = j;
-		// 		}
-		// 	}
-		// }
-		// return fittestMembers;
-
+		// sort the population according to fitness
+		// index 100 is the fittest member
 		population.sort(Comparator.comparing(RealGenotype::getFitness));
 	}
 
@@ -79,7 +56,7 @@ public class Population
 			do{
 				dad_idx = 99 - (int) Math.abs(r.nextGaussian()*30);
 			} while (mom_idx == dad_idx || dad_idx < 0);
-			// System.out.println(mom_idx);
+
 			RealGenotype child = RealGenotype.breed2(population.get(mom_idx), population.get(dad_idx));
 			
 			// add mutation
@@ -87,19 +64,14 @@ public class Population
 
 			new_population.add(child);
 		}
+		// add the parents to the next generation
 		for(int i=popCount-noOfSurvivors;i<popCount;i++){
 			new_population.add(population.get(i));
 		}
-
 		population = new_population;
 	}
 
     public ArrayList<RealGenotype> getPopulation(){
     	return population;
     }
-
-
-
-
-
 }
