@@ -1,11 +1,6 @@
-import java.util.Arrays;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Comparator;
 import java.util.Random;
-
-
-import org.vu.contest.ContestSubmission;
 import org.vu.contest.ContestEvaluation;
 
 public class Population
@@ -21,7 +16,6 @@ public class Population
 		initPopulation();
 		evaluation_ = evaluation;
 	}
-
 	private void initPopulation(){
 		for(int i=0;i<popCount;i++){
         	population.add(new RealGenotype(-5,5));

@@ -79,11 +79,11 @@ public class RealGenotype {
      * Uniform mutation. Each allele has mutationP probability of being changed to a new value, uniformly
      * distributed in [lo, hi]
      * */
-    public RealGenotype mutate(double lo, double hi){
+    public RealGenotype mutate(){
         Random r = new Random();
         for(int i = 0; i < RealGenotype.D; i++){
             if(r.nextFloat() < this.mutationP)
-                this.value[i] = (hi - lo)*r.nextDouble() + lo;
+                this.value[i] = (RealGenotype.DOMAIN_HI - RealGenotype.DOMAIN_LO)*r.nextDouble() + RealGenotype.DOMAIN_LO;
         }
         return this;
     }
@@ -92,11 +92,13 @@ public class RealGenotype {
      * deviation
      * */
     public RealGenotype mutate(double sigma){
-        Random r = new Random();
-        for(int i = 0; i < RealGenotype.D; i++){
-            do{
-                this.value[i] += r.nextGaussian()*sigma;
-               } while (Math.abs(this.value[i])>5);
+	Random r = new Random(); 
+	for(int i = 0; i < RealGenotype.D; i++){
+	    if(r.nextDouble()<0.25){
+		do{
+		    this.value[i] += r.nextGaussian()*sigma;
+		} while (Math.abs(this.value[i])>5);
+	    }
         }
         return this;
     }
@@ -104,17 +106,17 @@ public class RealGenotype {
      * 1-point crossover breeding function
      **/
     public static RealGenotype breed1(RealGenotype mom, RealGenotype dad){
-	Random r = new Random();
-    int cut = r.nextInt(10);
-	RealGenotype kid = new RealGenotype();
-	for(int i=0; i<kid.getValue().length; i++){
-	    if(i<cut){
-		kid.getValue()[i] = mom.getValue()[i];
-	    } else{
-		kid.getValue()[i] = dad.getValue()[i];
-	    }
-	}
-	return kid;
+        Random r = new Random();
+        int cut = r.nextInt(10);
+        RealGenotype kid = new RealGenotype();
+        for(int i=0; i<kid.getValue().length; i++){
+            if(i<cut){
+            kid.getValue()[i] = mom.getValue()[i];
+            } else{
+            kid.getValue()[i] = dad.getValue()[i];
+            }
+        }
+        return kid;
     }
     /**
      * Takes  two RealGenotypes that act as parents and returns a
@@ -123,25 +125,16 @@ public class RealGenotype {
      * Chance of allel of mom being selected: fitness(mom)/(fitness(mom)+fitness(dad))
      **/
     public static RealGenotype breed2(RealGenotype mom, RealGenotype dad){
-	RealGenotype kid = new RealGenotype();
-    Random r = new Random();
-	for(int i=0; i<kid.getValue().length; i++){
-	    if(r.nextDouble() <= mom.getFitness()/(mom.getFitness()+dad.getFitness())){
-		kid.getValue()[i] = mom.getValue()[i];
-	    } else{
-		kid.getValue()[i] = dad.getValue()[i];
-	    }
-	}
-	return kid;
-    }	
-    public static void main(String[] args){
-        System.out.println("Testing Genotype");
-        RealGenotype[] genes = new RealGenotype[10];
-        for(int i = 0; i < 10; i++){
-            genes[i] = new RealGenotype(-100, 100);
-            System.out.println(genes[i]);
+        RealGenotype kid = new RealGenotype();
+        Random r = new Random();
+        for(int i=0; i<kid.getValue().length; i++){
+            if(r.nextDouble() <= mom.getFitness()/(mom.getFitness()+dad.getFitness())){
+            kid.getValue()[i] = mom.getValue()[i];
+            } else{
+            kid.getValue()[i] = dad.getValue()[i];
+            }
         }
-        System.exit(1);
+        return kid;
     }
 }
 
