@@ -2,6 +2,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Random;
 import org.vu.contest.ContestEvaluation;
+import java.util.Collections;
 
 public class Population
 {
@@ -73,7 +74,9 @@ public class Population
         }
         // sort the population according to fitness
         // index 100 is the fittest member
-        population.sort(Comparator.comparing(RealGenotype::getFitness));
+        // population.sort(Comparator.comparing(RealGenotype::getFitness));
+        Collections.sort(population,
+                (o1, o2) ->  Double.compare(o1.getFitness(), o2.getFitness()));
     }
 
     private void recombine(){
