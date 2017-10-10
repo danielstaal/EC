@@ -26,7 +26,7 @@ public class Population
 
     public Population(Map evType, ContestEvaluation evaluation, int evLimit){
         evaluation_ = evaluation;
-	evaluationType = evType;
+        evaluationType = evType;
         evaluationLimit = evLimit;
         setHyperparameters();
 
