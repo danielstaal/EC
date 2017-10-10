@@ -1,4 +1,5 @@
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Created by fabigato on 16-9-17.
@@ -15,6 +16,11 @@ public class RealGenotype {
     private double fitness;
     //non static, so that different individuals can mutate at different rates
     private float mutationP = 1/RealGenotype.D;
+    // species tag
+    private int species = 1;
+    private int no_of_species = 4;
+
+
     /**
      * Empty constructor. Creates a genotype with double values uniformly distributed in [0, 1]
      * */
@@ -135,6 +141,11 @@ public class RealGenotype {
             }
         }
         return kid;
+    }
+
+    public void setSpecies(){
+        Random r = new Random();
+        species = ThreadLocalRandom.current().nextInt(1, no_of_species + 1);
     }
 }
 

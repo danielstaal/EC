@@ -115,4 +115,11 @@ public class Population
     public int getNoOfGenerations(){
         return noOfGenerations;
     }
+
+    private void initSpecies(){
+        for(int i=0;i<Population.size();i++){
+            Population.get(i).setSpecies();
+        }
+    }
+
 }
