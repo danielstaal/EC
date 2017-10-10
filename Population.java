@@ -3,12 +3,15 @@ import java.util.Comparator;
 import java.util.Random;
 import org.vu.contest.ContestEvaluation;
 import java.util.Collections;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.Hashtable;
 
 public class Population
 {
     private ArrayList<RealGenotype> population = new ArrayList<RealGenotype>(); 
     private int noOfSurvivors = 0;
-    private String evaluationType = "";
+    private Map  evaluationType;
     private double evaluationLimit = 0.0;
     ContestEvaluation evaluation_;
 
@@ -21,9 +24,9 @@ public class Population
     double selection_std = 0;
 
 
-    public Population(String evType, ContestEvaluation evaluation, int evLimit){
+    public Population(Map evType, ContestEvaluation evaluation, int evLimit){
         evaluation_ = evaluation;
-        evaluationType = evType;
+	evaluationType = evType;
         evaluationLimit = evLimit;
         setHyperparameters();
 
@@ -33,12 +36,12 @@ public class Population
 
     private void setHyperparameters(){
         System.out.println(evaluationType);
-        if(evaluationType.equals("Multimodal")){
+        if((Boolean)evaluationType.get("Multimodal")){
             populationSize = 100;
             selection_std = 30;
             noOfGenerations = (int)(evaluationLimit/populationSize);
             noOfSurvivors = 20;
-        }else if(evaluationType.equals("Regular")){
+        }else if((Boolean)evaluationType.get("Regular")){
             populationSize = 10;
             selection_std = 0.3;
             noOfGenerations = (int)(evaluationLimit/populationSize);
