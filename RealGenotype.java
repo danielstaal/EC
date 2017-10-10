@@ -18,7 +18,6 @@ public class RealGenotype {
     private float mutationP = 1/RealGenotype.D;
     // species tag
     private int species = 1;
-    private int no_of_species = 4;
 
 
     /**
@@ -80,6 +79,8 @@ public class RealGenotype {
     public float getMutationP(){return this.mutationP;}
     public double[] getValue(){return value;}
     public double getFitness(){return this.fitness;}
+    public int getSpecies(){return this.species;}
+    public void setSpecies(int species_){this.species=species_;}
     public void setFitness(double fitness){this.fitness = fitness;}
     /**
      * Uniform mutation. Each allele has mutationP probability of being changed to a new value, uniformly
@@ -98,13 +99,15 @@ public class RealGenotype {
      * deviation
      * */
     public RealGenotype mutate(double sigma){
-    Random r = new Random(); 
-    for(int i = 0; i < RealGenotype.D; i++){
-        if(r.nextDouble()<0.25){
-        do{
-            this.value[i] += r.nextGaussian()*sigma;
-        } while (Math.abs(this.value[i])>5);
-        }
+        Random r = new Random(); 
+        for(int i = 0; i < RealGenotype.D; i++){
+            if(r.nextDouble()<0.25){
+                double increment;
+                do{
+                    increment = r.nextGaussian()*sigma;
+                } while (Math.abs(this.value[i] + increment)>5);
+                this.value[i] += increment;
+            }
         }
         return this;
     }
@@ -143,7 +146,7 @@ public class RealGenotype {
         return kid;
     }
 
-    public void setSpecies(){
+    public void setRandomSpecies(int no_of_species){
         Random r = new Random();
         species = ThreadLocalRandom.current().nextInt(1, no_of_species + 1);
     }
