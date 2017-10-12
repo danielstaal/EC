@@ -7,10 +7,9 @@ import java.lang.Math;
 
 public class group39 implements ContestSubmission
 {
-	Random rnd_;
-    ContestEvaluation evaluation_;
+	private Random rnd_;
+    private ContestEvaluation evaluation_;
 
-	private static final int dimensions = 10;
     private int evaluations_limit_;
 
     private String evaluationType = "";
@@ -50,14 +49,6 @@ public class group39 implements ContestSubmission
         }else{
             evaluationType = "Separable";
         }
-    }
-
-    private double distance(double[] coor1, double[] coor2){
-    	double distance = 0.0;
-    	for(int i=0;i<dimensions;i++){
-    		distance += Math.pow((coor1[i] - coor2[i]),2);
-    	}
-    	return Math.sqrt(distance);
     }
     
 	public void run()
