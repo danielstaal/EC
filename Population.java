@@ -15,6 +15,9 @@ public class Population
     private double evaluationLimit = 0.0;
     ContestEvaluation evaluation_;
 
+    private int no_of_species = 3;
+
+
     private static Random r = new Random();
 
     //////// hyperparameters to be set according to the type of function
@@ -23,12 +26,17 @@ public class Population
     // standard deviation for the gaussian selecting the parents
     double selection_std = 0;
 
+    // 
+    boolean speciation;
 
-    public Population(Map evType, ContestEvaluation evaluation, int evLimit){
+
+
+    public Population(Map evType, ContestEvaluation evaluation, int evLimit, boolean speciation_){
         evaluation_ = evaluation;
         evaluationType = evType;
         evaluationLimit = evLimit;
         setHyperparameters();
+        speciation = speciation_;
 
         initPopulation();
     }
@@ -54,7 +62,6 @@ public class Population
         }
     }
 
-
     private void initPopulation(){
         for(int i=0;i<populationSize;i++){
             population.add(new RealGenotype(-5,5));
@@ -68,7 +75,10 @@ public class Population
         // recombination, mutation
         recombine();
         mutate();
-            
+    
+        System.out.println(population.get(populationSize-1).getFitness());
+
+        // countSpecies();
     }
 
     private void selection(){
@@ -88,16 +98,18 @@ public class Population
         int dad_idx = 0;
         for(int i=0;i<populationSize - noOfSurvivors;i++){
             do{
+            // System.out.print("mom");
             mom_idx = (populationSize-1) - (int) Math.abs(r.nextGaussian()*selection_std);
             } while (mom_idx < 0);
             do{
+            // System.out.print("dad");    
             dad_idx = (populationSize-1) - (int) Math.abs(r.nextGaussian()*selection_std);
-            } while (mom_idx == dad_idx || dad_idx < 0);
-            // System.out.println(mom_idx);
+            } while (mom_idx == dad_idx || dad_idx < 0 || !checkSameSpecies(mom_idx, dad_idx));
+            
             RealGenotype child = RealGenotype.breed2(population.get(mom_idx), population.get(dad_idx));
-                
+            child.setSpecies(population.get(mom_idx).getSpecies());
             new_population.add(child);
-    }
+        }
         // add parents to the population
         for(int i=populationSize-noOfSurvivors;i<populationSize;i++){
             new_population.add(population.get(i));
@@ -105,9 +117,16 @@ public class Population
         population = new_population;
     }
     
+    // 
     public void mutate(){
+        Random r = new Random();
         for(int i=noOfSurvivors;i<populationSize;i++){
             population.get(i).mutate(0.5);
+            if(speciation){
+                if(r.nextDouble()<0.1){
+                    population.get(i).setRandomSpecies(no_of_species);
+                }
+            }
         }
     }
     
@@ -117,5 +136,30 @@ public class Population
 
     public int getNoOfGenerations(){
         return noOfGenerations;
+    }
+
+    public void initSpecies(){
+        for(int i=0;i<population.size();i++){
+            population.get(i).setRandomSpecies(no_of_species);
+        }
+    }
+
+    private boolean checkSameSpecies(int mom_idx, int dad_idx){
+        if(population.get(mom_idx).getSpecies() == population.get(dad_idx).getSpecies()){
+            return true;
+        }    
+        return false;
+    }
+
+    private void countSpecies(){
+        int[] counts = new int[no_of_species];
+        for(int i=0;i<populationSize;i++){
+            counts[population.get(i).getSpecies()-1] += 1;
+        }
+        for(int j=0;j<no_of_species;j++){
+            System.out.print(counts[j]);
+            System.out.print(" ");
+        }
+        System.out.println("");
     }
 }

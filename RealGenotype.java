@@ -1,4 +1,5 @@
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Created by fabigato on 16-9-17.
@@ -15,16 +16,20 @@ public class RealGenotype {
     private double fitness;
     //non static, so that different individuals can mutate at different rates
     private float mutationP = 1/RealGenotype.D;
+    // species tag
+    private int species = 1;
+
+
     /**
      * Empty constructor. Creates a genotype with double values uniformly distributed in [0, 1]
      * */
     public RealGenotype() {
-	this.fitness = -1;
+        this.fitness = -1;
         Random r = new Random();
         value = new double[RealGenotype.D];
         for(int i = 0; i < RealGenotype.D; i++){
             value[i] = (RealGenotype.DOMAIN_HI - RealGenotype.DOMAIN_LO)*r.nextDouble() +
-		RealGenotype.DOMAIN_LO;
+                RealGenotype.DOMAIN_LO;
         }
     }
     /**
@@ -34,9 +39,9 @@ public class RealGenotype {
      * [RealGenotype.DOMAIN_LO, RealGenotype.DOMAIN_HI]
      * */
     public RealGenotype(double valueRangeLo, double valueRangeHi){
-	this.fitness = -1;
+        this.fitness = -1;
         if(valueRangeHi > RealGenotype.DOMAIN_HI || valueRangeLo < RealGenotype.DOMAIN_LO ||
-	   valueRangeHi <= RealGenotype.DOMAIN_LO){
+           valueRangeHi <= RealGenotype.DOMAIN_LO){
             //TODO: do this with a Logger instead: http://www.vogella.com/tutorials/Logging/article.html
             System.out.println("Invalid range. Upper: " + valueRangeHi + ". Lower: " + valueRangeLo);
             System.out.println("Using default bounds");
@@ -53,7 +58,7 @@ public class RealGenotype {
      * Copy constructor. Creates a genotype with a given value
      * */
     public RealGenotype(double[] gen){
-	this.fitness = -1;
+        this.fitness = -1;
         assert (gen.length == RealGenotype.D);
         for(int i = 0; i < RealGenotype.D; i++){
             assert(RealGenotype.DOMAIN_LO <= gen[i] && gen[i] <= RealGenotype.DOMAIN_HI);
@@ -74,6 +79,8 @@ public class RealGenotype {
     public float getMutationP(){return this.mutationP;}
     public double[] getValue(){return value;}
     public double getFitness(){return this.fitness;}
+    public int getSpecies(){return this.species;}
+    public void setSpecies(int species_){this.species=species_;}
     public void setFitness(double fitness){this.fitness = fitness;}
     /**
      * Uniform mutation. Each allele has mutationP probability of being changed to a new value, uniformly
@@ -92,13 +99,15 @@ public class RealGenotype {
      * deviation
      * */
     public RealGenotype mutate(double sigma){
-	Random r = new Random(); 
-	for(int i = 0; i < RealGenotype.D; i++){
-	    if(r.nextDouble()<0.25){
-		do{
-		    this.value[i] += r.nextGaussian()*sigma;
-		} while (Math.abs(this.value[i])>5);
-	    }
+        Random r = new Random(); 
+        for(int i = 0; i < RealGenotype.D; i++){
+            if(r.nextDouble()<0.25){
+                double increment;
+                do{
+                    increment = r.nextGaussian()*sigma;
+                } while (Math.abs(this.value[i] + increment)>5);
+                this.value[i] += increment;
+            }
         }
         return this;
     }
@@ -111,9 +120,9 @@ public class RealGenotype {
         RealGenotype kid = new RealGenotype();
         for(int i=0; i<kid.getValue().length; i++){
             if(i<cut){
-		kid.getValue()[i] = mom.getValue()[i];
+                kid.getValue()[i] = mom.getValue()[i];
             } else{
-		kid.getValue()[i] = dad.getValue()[i];
+                kid.getValue()[i] = dad.getValue()[i];
             }
         }
         return kid;
@@ -129,12 +138,17 @@ public class RealGenotype {
         Random r = new Random();
         for(int i=0; i<kid.getValue().length; i++){
             if(r.nextDouble() <= mom.getFitness()/(mom.getFitness()+dad.getFitness())){
-		kid.getValue()[i] = mom.getValue()[i];
+                kid.getValue()[i] = mom.getValue()[i];
             } else{
-		kid.getValue()[i] = dad.getValue()[i];
+                kid.getValue()[i] = dad.getValue()[i];
             }
         }
         return kid;
+    }
+
+    public void setRandomSpecies(int no_of_species){
+        Random r = new Random();
+        species = ThreadLocalRandom.current().nextInt(1, no_of_species + 1);
     }
 }
 
