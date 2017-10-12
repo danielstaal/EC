@@ -151,16 +151,3 @@ public class RealGenotype {
         species = ThreadLocalRandom.current().nextInt(1, no_of_species + 1);
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-

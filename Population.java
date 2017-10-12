@@ -15,7 +15,7 @@ public class Population
     private double evaluationLimit = 0.0;
     ContestEvaluation evaluation_;
 
-    private int no_of_species = 3;
+    private int no_of_species = 4;
 
 
     private static Random r = new Random();
@@ -76,9 +76,9 @@ public class Population
         recombine();
         mutate();
     
-        System.out.println(population.get(populationSize-1).getFitness());
+        // System.out.println(population.get(populationSize-1).getFitness());
 
-        // countSpecies();
+        countSpecies();
     }
 
     private void selection(){
@@ -123,7 +123,7 @@ public class Population
         for(int i=noOfSurvivors;i<populationSize;i++){
             population.get(i).mutate(0.5);
             if(speciation){
-                if(r.nextDouble()<0.1){
+                if(r.nextDouble()<0.4){
                     population.get(i).setRandomSpecies(no_of_species);
                 }
             }
