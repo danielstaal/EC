@@ -21,11 +21,13 @@ public class group39 implements ContestSubmission
 
     private Map<String, Boolean> evaluationType = new HashMap<String, Boolean>();
 
+        
+
     public group39()
     {
         rnd_ = new Random();
     }
-    
+
     public void setSeed(long seed)
     {
         // Set seed of algorithms random process
@@ -36,7 +38,7 @@ public class group39 implements ContestSubmission
     {
         // Set evaluation problem used in the run
         evaluation_ = evaluation;
-        
+
         // Get evaluation properties
         Properties props = evaluation.getProperties();
         // Get evaluation limit
@@ -48,18 +50,18 @@ public class group39 implements ContestSubmission
         boolean hasStructure = Boolean.parseBoolean(props.getProperty("Regular"));
         boolean isSeparable = Boolean.parseBoolean(props.getProperty("Separable"));
 
-    	// Do sth with property values, e.g. specify relevant settings of your algorithm
-    	evaluationType.put("Multimodal", isMultimodal);
-    	evaluationType.put("Regular", hasStructure);
-    	evaluationType.put("Separable", isSeparable);
-        }
+        // Do sth with property values, e.g. specify relevant settings of your algorithm
+        evaluationType.put("Multimodal", isMultimodal);
+        evaluationType.put("Regular", hasStructure);
+        evaluationType.put("Separable", isSeparable);
+    }
 
     private double distance(double[] coor1, double[] coor2){
-    	double distance = 0.0;
-    	for(int i=0;i<dimensions;i++){
-	       distance += Math.pow((coor1[i] - coor2[i]),2);
-    	}
-    	return Math.sqrt(distance);
+        double distance = 0.0;
+        for(int i=0;i<dimensions;i++){
+            distance += Math.pow((coor1[i] - coor2[i]),2);
+        }
+        return Math.sqrt(distance);
     }
     
     public void run()
@@ -71,5 +73,22 @@ public class group39 implements ContestSubmission
         for(int i=0;i<population.getNoOfGenerations();i++){
             population.nextGeneration(); 
         }
+
+        // Run your algorithm here
+        
+        // int evals = 0;
+        // System.out.println(evaluations_limit_);
+        // init population
+
+        // calculate fitness
+        // while(evals<evaluations_limit_-1000){
+        // Select parents
+        // Apply crossover / mutation operators
+        // double child[] = {0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0};
+        // Check fitness of unknown fuction
+
+        // evals++;
+        // Select survivors
+        // }
     }
 }

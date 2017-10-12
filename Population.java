@@ -33,7 +33,7 @@ public class Population
 
     public Population(Map evType, ContestEvaluation evaluation, int evLimit, boolean speciation_){
         evaluation_ = evaluation;
-	    evaluationType = evType;
+        evaluationType = evType;
         evaluationLimit = evLimit;
         setHyperparameters();
         speciation = speciation_;

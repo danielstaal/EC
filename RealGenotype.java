@@ -24,12 +24,12 @@ public class RealGenotype {
      * Empty constructor. Creates a genotype with double values uniformly distributed in [0, 1]
      * */
     public RealGenotype() {
-    this.fitness = -1;
+        this.fitness = -1;
         Random r = new Random();
         value = new double[RealGenotype.D];
         for(int i = 0; i < RealGenotype.D; i++){
             value[i] = (RealGenotype.DOMAIN_HI - RealGenotype.DOMAIN_LO)*r.nextDouble() +
-                    RealGenotype.DOMAIN_LO;
+                RealGenotype.DOMAIN_LO;
         }
     }
     /**
@@ -39,9 +39,9 @@ public class RealGenotype {
      * [RealGenotype.DOMAIN_LO, RealGenotype.DOMAIN_HI]
      * */
     public RealGenotype(double valueRangeLo, double valueRangeHi){
-    this.fitness = -1;
+        this.fitness = -1;
         if(valueRangeHi > RealGenotype.DOMAIN_HI || valueRangeLo < RealGenotype.DOMAIN_LO ||
-                valueRangeHi <= RealGenotype.DOMAIN_LO){
+           valueRangeHi <= RealGenotype.DOMAIN_LO){
             //TODO: do this with a Logger instead: http://www.vogella.com/tutorials/Logging/article.html
             System.out.println("Invalid range. Upper: " + valueRangeHi + ". Lower: " + valueRangeLo);
             System.out.println("Using default bounds");
@@ -58,7 +58,7 @@ public class RealGenotype {
      * Copy constructor. Creates a genotype with a given value
      * */
     public RealGenotype(double[] gen){
-    this.fitness = -1;
+        this.fitness = -1;
         assert (gen.length == RealGenotype.D);
         for(int i = 0; i < RealGenotype.D; i++){
             assert(RealGenotype.DOMAIN_LO <= gen[i] && gen[i] <= RealGenotype.DOMAIN_HI);
@@ -120,9 +120,9 @@ public class RealGenotype {
         RealGenotype kid = new RealGenotype();
         for(int i=0; i<kid.getValue().length; i++){
             if(i<cut){
-            kid.getValue()[i] = mom.getValue()[i];
+                kid.getValue()[i] = mom.getValue()[i];
             } else{
-            kid.getValue()[i] = dad.getValue()[i];
+                kid.getValue()[i] = dad.getValue()[i];
             }
         }
         return kid;
@@ -138,9 +138,9 @@ public class RealGenotype {
         Random r = new Random();
         for(int i=0; i<kid.getValue().length; i++){
             if(r.nextDouble() <= mom.getFitness()/(mom.getFitness()+dad.getFitness())){
-            kid.getValue()[i] = mom.getValue()[i];
+                kid.getValue()[i] = mom.getValue()[i];
             } else{
-            kid.getValue()[i] = dad.getValue()[i];
+                kid.getValue()[i] = dad.getValue()[i];
             }
         }
         return kid;
