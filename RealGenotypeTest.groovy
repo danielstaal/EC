@@ -11,7 +11,7 @@ class RealGenotypeTest extends GroovyTestCase {
             genes[i] = new RealGenotype();
             double[] genotype = genes[i].getValue();
             for(int j = 0; j < genotype.length; j++){
-                assert(genotype[j] >= RealGenotype.DOMAIN_LO && genotype[j] <= RealGenotype.DOMAIN_HI)
+                assert(genotype[j] >= RealGenotype.DOMAIN_LO && genotype[j] <= RealGenotype.DOMAIN_HI);
             }
         }
     }
