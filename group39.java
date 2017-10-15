@@ -6,6 +6,15 @@ import java.util.Properties;
 import java.util.Map;
 import java.util.HashMap;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.File;
+import java.io.IOException;
+
+
+
 public class group39 implements ContestSubmission
 {
     private static final int dimensions = 10;
@@ -51,8 +60,45 @@ public class group39 implements ContestSubmission
         evaluationType.put("Separable", isSeparable);
     }
     
+    public void test(){
+        System.out.println("a");
+    }
+
     public void run()
     {
+        // File inputFile = new File("hparams.txt");
+        // File tempFile = new File("tempParams.txt");
+
+        // BufferedReader reader = null;
+        // BufferedWriter writer = null;
+        // String trimmedLine = "";
+
+        // try {
+        //     reader = new BufferedReader(new FileReader(inputFile));
+        //     writer = new BufferedWriter(new FileWriter(tempFile));
+
+
+        //     String currentLine;
+
+        //     int i = 0;
+        //     while((currentLine = reader.readLine()) != null) {
+        //         // trim newline when comparing with lineToRemove
+        //         trimmedLine = currentLine.trim();
+        //         if(i==0) continue;
+        //         writer.write(currentLine + System.getProperty("line.separator"));
+        //         i++;
+        //     }        
+
+        //     writer.close(); 
+        //     reader.close(); 
+        // }
+        // catch(IOException ex){
+        //     ex.printStackTrace();
+        // }
+        // boolean successful = tempFile.renameTo(inputFile);
+
+        // System.out.println(trimmedLine);
+
 
         Population population = new Population(evaluationType, evaluation_, evaluations_limit_, speciation);
         population.initSpecies();
@@ -61,21 +107,5 @@ public class group39 implements ContestSubmission
             population.nextGeneration(); 
         }
 
-        // Run your algorithm here
-        
-        // int evals = 0;
-        // System.out.println(evaluations_limit_);
-        // init population
-
-        // calculate fitness
-        // while(evals<evaluations_limit_-1000){
-        // Select parents
-        // Apply crossover / mutation operators
-        // double child[] = {0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0};
-        // Check fitness of unknown fuction
-
-        // evals++;
-        // Select survivors
-        // }
     }
 }
