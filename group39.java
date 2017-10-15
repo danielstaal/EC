@@ -54,9 +54,7 @@ public class group39 implements ContestSubmission
 	    if(p.evaluate() == false){
 		break;
 	    }	    
-	    if(p.calculateNoOffspring()){
-		break;
-	    }
+	    p.calculateNoOffspring();
 	    p.generateNextGen();
 	    i++;
 	}

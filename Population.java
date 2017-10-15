@@ -17,6 +17,7 @@ public class Population
     static int                   populationSize_     = 20;
     static int                   NO_VARIABLES        = 10;
     double                       maxPopDistance      = 0.5; // maximum distance to population centroid
+    boolean                      fitnessSharing      = true;
     
     /*********************
      *  local variables  *
@@ -49,7 +50,9 @@ public class Population
 	    sp.fitness_     = 0;
 	    for(Genotype g : sp.members_){
 		g.fitness_  = (double) evaluation_.evaluate(g.genome_);
-		g.fitness_ /= sp.members_.size();
+		if(fitnessSharing){
+		    g.fitness_ /= sp.members_.size();
+		}
 		sp.fitness_ += g.fitness_;
 		fitness_    += g.fitness_;
 		evaluations++;
@@ -107,27 +110,17 @@ public class Population
     }
 
 
-    public boolean calculateNoOffspring(){
+    public void calculateNoOffspring(){
 	int nExpectedOffspring = 0;
 	for(Species sp : species_){
 	    sp.nOffspring_ = (int) (Math.round(populationSize_ * sp.fitness_ / fitness_));
 	    nExpectedOffspring += sp.nOffspring_;
 	}
-	
 	for(int sign=Integer.signum(populationSize_ - nExpectedOffspring); populationSize_
 		!= nExpectedOffspring; ){
 	    species_.get(r.nextInt(species_.size())).nOffspring_ += sign;
 	    nExpectedOffspring += sign;
 	}
-	int popSize = 0; // for testing
-	for(Species sp : species_){
-	    popSize += sp.members_.size();
-	}
-	if(nExpectedOffspring != populationSize_){
-	    System.out.println("nExpectedOffspring " + nExpectedOffspring + " is not right!");
-	    return true;
-	}
-	return false;
     }
 
     
@@ -137,9 +130,6 @@ public class Population
 	    species_.get(i).sort();
 	    species_.get(i).generateOffspring();
 	    population_.addAll(species_.get(i).members_);
-	}
-	if(population_.size() != populationSize_){
-	    System.out.println("Population has incorrect size: " + population_.size());
 	}
     }
 }
