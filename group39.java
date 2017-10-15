@@ -15,26 +15,26 @@ public class group39 implements ContestSubmission
     
     public group39()
     {
-	rnd_ = new Random();
+        rnd_ = new Random();
     }
-	
+        
     public void setSeed(long seed)
     {
-	// Set seed of algortihms random process
-	rnd_.setSeed(seed);
+        // Set seed of algortihms random process
+        rnd_.setSeed(seed);
     }
 
     public void setEvaluation(ContestEvaluation evaluation)
     {
-	// Set evaluation problem used in the run
-	evaluation_ = evaluation;
-		
-	// Get evaluation properties
-	Properties props = evaluation.getProperties();
+        // Set evaluation problem used in the run
+        evaluation_ = evaluation;
+                
+        // Get evaluation properties
+        Properties props = evaluation.getProperties();
         // Get evaluation limit
         evaluationsLimit_ = Integer.parseInt(props.getProperty("Evaluations"));
-	// Property keys depend on specific evaluation
-	// E.g. double param = Double.parseDouble(props.getProperty("property_name"));
+        // Property keys depend on specific evaluation
+        // E.g. double param = Double.parseDouble(props.getProperty("property_name"));
         boolean isMultimodal = Boolean.parseBoolean(props.getProperty("Multimodal"));
         boolean hasStructure = Boolean.parseBoolean(props.getProperty("Regular"));
         boolean isSeparable = Boolean.parseBoolean(props.getProperty("Separable"));
@@ -46,17 +46,17 @@ public class group39 implements ContestSubmission
     
     public void run()
     {
-	Population p = new Population(evaluationsLimit_, evaluation_, evaluationType);
+        Population p = new Population(evaluationsLimit_, evaluation_, evaluationType);
 
-	int i = 0;
-	while(true){
-	    p.speciate();
-	    if(p.evaluate() == false){
-		break;
-	    }	    
-	    p.calculateNoOffspring();
-	    p.generateNextGen();
-	    i++;
-	}
+        int i = 0;
+        while(true){
+            p.speciate();
+            if(p.evaluate() == false){
+                break;
+            }       
+            p.calculateNoOffspring();
+            p.generateNextGen();
+            i++;
+        }
     }
 }
