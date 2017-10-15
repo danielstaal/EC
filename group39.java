@@ -100,7 +100,7 @@ public class group39 implements ContestSubmission
         // System.out.println(trimmedLine);
 
 
-        Population population = new Population(evaluationType, evaluation_, evaluations_limit_, speciation, no_of_species);
+        Population population = new Population(evaluationType, evaluation_, evaluations_limit_, speciation);
         population.initSpecies();
 
         for(int i=0;i<population.getNoOfGenerations();i++){

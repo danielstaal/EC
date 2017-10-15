@@ -1,6 +1,3 @@
-
-
-
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/
 
 javac -cp contest.jar group39.java RealGenotype.java Population.java

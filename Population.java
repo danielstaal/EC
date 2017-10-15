@@ -88,12 +88,9 @@ public class Population
         // recombination, mutation
         recombine();
         mutate();
-<<<<<<< HEAD
     
         // System.out.println(population.get(populationSize-1).getFitness());
-=======
     }
->>>>>>> c4477a30f101e79385788e3e2fc4b5251e572946
 
     private void fSCalculateDistances(){
         for(int r = 0; r < populationSize; r++){
