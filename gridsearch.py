@@ -19,6 +19,7 @@ if __name__ == '__main__':
     sigma = ['x', 'y', 'z']
 
     hyperparams = [populationSize, speciation, alpha, sigma]
+    hyperparams_names = ['populationSize', 'speciation', 'alpha', 'sigma']
 
 
 
@@ -27,7 +28,7 @@ if __name__ == '__main__':
     for combination in combinations[:1]:
         java_exe_line = ["java"]
         for i, hyperparam in enumerate(combination):
-            java_exe_line.append("var" + str(i) + "=" + str(hyperparam))
+            java_exe_line.append('-D' + hyperparams_names[i] + "=" + str(hyperparam))
         java_exe_line.extend(["-jar","testrun.jar", "-submission=group39", "-evaluation=BentCigarFunction", "-seed=1"])
 
         print(java_exe_line)
