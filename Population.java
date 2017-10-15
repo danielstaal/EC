@@ -6,41 +6,42 @@ import java.util.Map;
 
 public class Population
 {
-    private ArrayList<RealGenotype> population = new ArrayList<>();
-    private int noOfSurvivors = 0;
-    private Map  evaluationType;
-    private double evaluationLimit = 0.0;
-    ContestEvaluation evaluation_;
-    private boolean FITNESS_SHARING = false;
-    private double fSSigmaDistance = 1; // neighborhood radius for fitness sharing
-    private double fSAlpha = 1; // alpha parameter of fitness sharing. Controlls how much
-    // do neighbors punish fitness, set in ]0, inf[
-    private double[][] fSDistances;
-    private double[] fSFitness;
 
-    private int no_of_species = 3;
+    /**********************
+     *  hyperparameters   *
+     **********************/
+    private boolean FITNESS_SHARING     = false;
+    private double  fSSigmaDistance     = 1;   // neighborhood radius for fitness sharing
+    private double  fSAlpha             = 1;   // Controlls how much neighbors punish fitness, set in [0, inf]
+    private int     no_of_species       = 3;
+    int             populationSize      = 0;
+    int             noOfGenerations     = 0;
+    boolean         speciation;
+    double          selection_std       = 0;   // standard deviation for the gaussian selecting the parents
+    double          newRandomSpeciesProb= 0.1; // robability that an individual gets placed in a random species
+    double          mutationStd         = 0.5; // standard deviation of allel mutation
+    static double   allelMutationProb   = 0.25;// Probability that an allel gets mutated
 
-
-    private static Random r = new Random();
-
-    //////// hyperparameters to be set according to the type of function
-    int populationSize = 0;
-    int noOfGenerations = 0;
-    // standard deviation for the gaussian selecting the parents
-    double selection_std = 0;
-
-    // 
-    boolean speciation;
-
+    /**********************
+     *  local variables   *
+     **********************/
+    
+    private ArrayList<RealGenotype> population      = new ArrayList<>();
+    private int                     noOfSurvivors   = 0;
+    private Map                     evaluationType;
+    private double                  evaluationLimit = 0.0;
+    ContestEvaluation               evaluation_;
+    private double[][]              fSDistances;
+    private double[]                fSFitness;
+    private static Random           r               = new Random();
 
 
     public Population(Map evType, ContestEvaluation evaluation, int evLimit, boolean speciation_){
-        evaluation_ = evaluation;
-        evaluationType = evType;
-        evaluationLimit = evLimit;
+        evaluation_           = evaluation;
+        evaluationType        = evType;
+        evaluationLimit       = evLimit;
         setHyperparameters();
-        speciation = speciation_;
-
+        speciation            = speciation_;
         initPopulation();
     }
 
@@ -48,20 +49,20 @@ public class Population
     private void setHyperparameters(){
         System.out.println(evaluationType);
         if((Boolean)evaluationType.get("Multimodal")){
-            populationSize = 100;
-            selection_std = 30;
+            populationSize  = 100;
+            selection_std   = 30;
             noOfGenerations = (int)(evaluationLimit/populationSize);
-            noOfSurvivors = 20;
+            noOfSurvivors   = 20;
         }else if((Boolean)evaluationType.get("Regular")){
-            populationSize = 10;
-            selection_std = 0.3;
+            populationSize  = 10;
+            selection_std   = 0.3;
             noOfGenerations = (int)(evaluationLimit/populationSize);
-            noOfSurvivors = 2;
+            noOfSurvivors   = 2;
         }else{
-            populationSize = 50;
-            selection_std = 10;
+            populationSize  = 50;
+            selection_std   = 10;
             noOfGenerations = (int)(evaluationLimit/populationSize);
-            noOfSurvivors = 10;
+            noOfSurvivors   = 10;
         }
     }
 
@@ -76,8 +77,8 @@ public class Population
      * Initializes all fitness sharing related variables
      */
     private void initfS(){
-        this.fSDistances = new double[populationSize][populationSize];
-        this.fSFitness = new double[populationSize];
+        this.fSDistances           = new double[populationSize][populationSize];
+        this.fSFitness             = new double[populationSize];
         this.fSCalculateFitness();
     }
 
@@ -105,10 +106,10 @@ public class Population
         // sort the population according to fitness
         // index 100 is the fittest member
         // population.sort(Comparator.comparing(RealGenotype::getFitness));
-        Collections.sort(population,
-                (o1, o2) ->  Double.compare(o1.getFitness(), o2.getFitness()));
-        if(this.FITNESS_SHARING == true)
-                this.fSCalculateFitness();
+        Collections.sort(population, (o1, o2) ->  Double.compare(o1.getFitness(), o2.getFitness()));
+        if(this.FITNESS_SHARING == true){
+	    this.fSCalculateFitness();
+	}
     }
 
     private void recombine(){
@@ -138,13 +139,12 @@ public class Population
             this.fSCalculateFitness();
     }
     
-    // 
     public void mutate(){
         Random r = new Random();
         for(int i=noOfSurvivors;i<populationSize;i++){
-            population.get(i).mutate(0.5);
+            population.get(i).mutate(mutationStd);
             if(speciation){
-                if(r.nextDouble()<0.1){
+                if(r.nextDouble()<newRandomSpeciesProb){
                     population.get(i).setRandomSpecies(no_of_species);
                 }
             }
@@ -168,10 +168,7 @@ public class Population
     }
 
     private boolean checkSameSpecies(int mom_idx, int dad_idx){
-        if(population.get(mom_idx).getSpecies() == population.get(dad_idx).getSpecies()){
-            return true;
-        }    
-        return false;
+        return population.get(mom_idx).getSpecies() == population.get(dad_idx).getSpecies();
     }
 
     private void countSpecies() {
@@ -220,8 +217,7 @@ public class Population
     /**
      * calculates euclidean distance between two arrays
      * */
-    private double fSDistance(RealGenotype a, RealGenotype b)
-    {
+    private double fSDistance(RealGenotype a, RealGenotype b){
         double distance = 0;
         for(int i=0;i<RealGenotype.D;i++){
             distance += Math.pow((a.getValue()[i] - b.getValue()[i]),2);
@@ -231,13 +227,16 @@ public class Population
 
     public void setFitness_sharing(boolean fs){
         this.FITNESS_SHARING = fs;
-        if (fs)
+        if (fs){
             this.initfS();
+	}
     }
+
     public void setFSSigmaDistance(double sigma){
         assert sigma > 0: "fitness sharing sigma must be positive, got " + sigma;
         this.fSSigmaDistance = sigma;
     }
+
     public void setFSAlpha(double alpha){
         assert alpha > 0: "fitness sharing sigma must be positive, got " + alpha;
         this.fSAlpha = alpha;
