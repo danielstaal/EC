@@ -10,8 +10,8 @@ import subprocess
 
 if __name__ == '__main__':
 
-    subprocess.run(['javac', '-cp', 'contest.jar', 'group39.java', 'RealGenotype.java', 'Population.java'])
-    subprocess.run(['jar', 'cmf', 'MainClass.txt', 'submission.jar', 'group39.class', 'RealGenotype.class', 'Population.class'])
+    subprocess.run(['javac', '-cp', 'contest.jar', 'group39.java', 'Genotype.java', 'Population.java', 'Species.java'])
+    subprocess.run(['jar', 'cmf', 'MainClass.txt', 'submission.jar', 'group39.class', 'Genotype.class', 'Population.class', 'Species.class'])
     
     populationSize = ['1','2','3','4']
     speciation = ['true', 'false']
@@ -25,7 +25,7 @@ if __name__ == '__main__':
 
     combinations = list(itertools.product(*hyperparams))
 
-    for combination in combinations[:1]:
+    for combination in combinations[:5]:
         java_exe_line = ["java"]
         for i, hyperparam in enumerate(combination):
             java_exe_line.append('-D' + hyperparams_names[i] + "=" + str(hyperparam))
@@ -33,7 +33,7 @@ if __name__ == '__main__':
 
         print(java_exe_line)
 
-
+        subprocess.run(java_exe_line)
 
 
 
