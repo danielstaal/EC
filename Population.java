@@ -2,120 +2,144 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Random;
 import org.vu.contest.ContestEvaluation;
-import java.util.Collections;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Hashtable;
+import java.lang.Math;
+import java.util.Collections;
+import java.util.Arrays;
 
 public class Population
 {
-    private ArrayList<RealGenotype> population = new ArrayList<RealGenotype>(); 
-    private int noOfSurvivors = 0;
-    private Map  evaluationType;
-    private double evaluationLimit = 0.0;
-    ContestEvaluation evaluation_;
-
-    private static Random r = new Random();
-
-    //////// hyperparameters to be set according to the type of function
-    int populationSize = 0;
-    int noOfGenerations = 0;
-    // standard deviation for the gaussian selecting the parents
-    double selection_std = 0;
-
-
-    public Population(Map evType, ContestEvaluation evaluation, int evLimit){
-        evaluation_ = evaluation;
-	evaluationType = evType;
-        evaluationLimit = evLimit;
-        setHyperparameters();
-
-        initPopulation();
-    }
-
-
-    private void setHyperparameters(){
-        System.out.println(evaluationType);
-        if((Boolean)evaluationType.get("Multimodal")){
-            populationSize = 100;
-            selection_std = 30;
-            noOfGenerations = (int)(evaluationLimit/populationSize);
-            noOfSurvivors = 20;
-        }else if((Boolean)evaluationType.get("Regular")){
-            populationSize = 10;
-            selection_std = 0.3;
-            noOfGenerations = (int)(evaluationLimit/populationSize);
-            noOfSurvivors = 2;
-        }else{
-            populationSize = 50;
-            selection_std = 10;
-            noOfGenerations = (int)(evaluationLimit/populationSize);
-            noOfSurvivors = 10;
-        }
-    }
-
-
-    private void initPopulation(){
-        for(int i=0;i<populationSize;i++){
-            population.add(new RealGenotype(-5,5));
-        }
-    }
-
-    public void nextGeneration(){
-        // Selection
-        selection();
-        // System.out.println(Arrays.toString(sel));
-        // recombination, mutation
-        recombine();
-        mutate();
-            
-    }
-
-    private void selection(){
-        for(int i=0;i<populationSize-noOfSurvivors;i++){
-            population.get(i).setFitness((double) evaluation_.evaluate(population.get(i).getValue()));
-        }
-        // sort the population according to fitness
-        // index 100 is the fittest member
-        // population.sort(Comparator.comparing(RealGenotype::getFitness));
-        Collections.sort(population,
-                (o1, o2) ->  Double.compare(o1.getFitness(), o2.getFitness()));
-    }
-
-    private void recombine(){
-        ArrayList<RealGenotype> new_population = new ArrayList<>();
-        int mom_idx = 0;
-        int dad_idx = 0;
-        for(int i=0;i<populationSize - noOfSurvivors;i++){
-            do{
-            mom_idx = (populationSize-1) - (int) Math.abs(r.nextGaussian()*selection_std);
-            } while (mom_idx < 0);
-            do{
-            dad_idx = (populationSize-1) - (int) Math.abs(r.nextGaussian()*selection_std);
-            } while (mom_idx == dad_idx || dad_idx < 0);
-            // System.out.println(mom_idx);
-            RealGenotype child = RealGenotype.breed2(population.get(mom_idx), population.get(dad_idx));
-                
-            new_population.add(child);
-    }
-        // add parents to the population
-        for(int i=populationSize-noOfSurvivors;i<populationSize;i++){
-            new_population.add(population.get(i));
-        }
-        population = new_population;
-    }
+    /*********************
+     *  hyperparameters  *
+     *********************/
+    static int                   populationSize_     = 20;
+    static int                   NO_VARIABLES        = 10;
+    double                       maxPopDistance      = 0.5; // maximum distance to population centroid
     
-    public void mutate(){
-        for(int i=noOfSurvivors;i<populationSize;i++){
-            population.get(i).mutate(0.5);
-        }
-    }
+    /*********************
+     *  local variables  *
+     *********************/
+    private ContestEvaluation    evaluation_;
+    private Map                  evaluationType_;
+    public static int            evaluationsLimit_;
+    public  static int           evaluations;
+    public  double               fitness_;
+    public ArrayList<Genotype>   population_         = new ArrayList<>();
+    public  ArrayList<Species>   species_            = new ArrayList<>();
+    static  Random               r                   = new Random();
+
     
-    public ArrayList<RealGenotype> getPopulation(){
-        return population;
+    public Population(int evaluationsLimit, ContestEvaluation evaluation, Map evaluationType)
+    {
+	evaluation_       = evaluation;
+	evaluationType_   = evaluationType;
+	evaluationsLimit_ = evaluationsLimit;
+	evaluations       = 0;
+	fitness_          = 0;
+	for(int i = 0; i<populationSize_; i++){population_.add(new Genotype(NO_VARIABLES));} //fill population
     }
 
-    public int getNoOfGenerations(){
-        return noOfGenerations;
+    
+    // Evaluate the fitness of all Species and all their Genotypes.
+    public boolean evaluate(){
+	fitness_            = 0;
+	for(Species sp : species_){
+	    sp.fitness_     = 0;
+	    for(Genotype g : sp.members_){
+		g.fitness_  = (double) evaluation_.evaluate(g.genome_);
+		g.fitness_ /= sp.members_.size();
+		sp.fitness_ += g.fitness_;
+		fitness_    += g.fitness_;
+		evaluations++;
+		if(evaluations >= evaluationsLimit_){
+		    return false;
+		}
+	    }
+	    sp.sort();
+	}
+	sortPopulation();
+	return true;
+    }
+
+    
+    public void sortPopulation(){
+	Collections.sort(population_, (o2, o1) ->  Double.compare(o1.fitness_, o2.fitness_));}
+
+    
+    public void speciate(){
+	for(Species sp : species_){  // clear all species (but retain their prototypes)
+	    sp.members_.clear();
+	    sp.age_++;
+	}
+	boolean matched;
+	for(Genotype g : population_){
+	    matched = false;
+	    for(Species sp : species_){
+	        if(distance(g, sp.prototype_) <= maxPopDistance){
+		    sp.members_.add(g);
+		    matched = true;
+		    break;
+		}
+	    }
+	    if(!matched){
+		species_.add(new Species(g));
+	    }
+	}
+	// Remove empty species.
+	species_.removeIf(sp -> sp.members_.isEmpty());
+	// Assign random prototype to each species.
+	for(Species sp : species_){
+	    sp.prototype_ = sp.members_.get(r.nextInt(sp.members_.size()));
+	}
+    }
+
+    
+    // Returns the distance between two Genomes
+    public double distance(Genotype a, Genotype b){
+	double distance = 0;
+	for(int i = 0; i<NO_VARIABLES; i++){
+	    distance += Math.pow(a.genome_[i] - b.genome_[i], 2);
+	}
+	distance = Math.sqrt(distance);
+	return distance;
+    }
+
+
+    public boolean calculateNoOffspring(){
+	int nExpectedOffspring = 0;
+	for(Species sp : species_){
+	    sp.nOffspring_ = (int) (Math.round(populationSize_ * sp.fitness_ / fitness_));
+	    nExpectedOffspring += sp.nOffspring_;
+	}
+	
+	for(int sign=Integer.signum(populationSize_ - nExpectedOffspring); populationSize_
+		!= nExpectedOffspring; ){
+	    species_.get(r.nextInt(species_.size())).nOffspring_ += sign;
+	    nExpectedOffspring += sign;
+	}
+	int popSize = 0; // for testing
+	for(Species sp : species_){
+	    popSize += sp.members_.size();
+	}
+	if(nExpectedOffspring != populationSize_){
+	    System.out.println("nExpectedOffspring " + nExpectedOffspring + " is not right!");
+	    return true;
+	}
+	return false;
+    }
+
+    
+    public void generateNextGen(){
+	population_.clear();
+	for(int i=0; i<species_.size(); i++){
+	    species_.get(i).sort();
+	    species_.get(i).generateOffspring();
+	    population_.addAll(species_.get(i).members_);
+	}
+	if(population_.size() != populationSize_){
+	    System.out.println("Population has incorrect size: " + population_.size());
+	}
     }
 }
