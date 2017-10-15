@@ -6,26 +6,31 @@ import java.util.concurrent.ThreadLocalRandom;
  * A genotype object with all the methods to breed, mutate and related genotype stuff
  */
 public class RealGenotype {
-    public enum MutationType{
 
-    }
-    public static final int D = 10; //solution space dimensionality
-    public static final double DOMAIN_HI = 5;
-    public static final double DOMAIN_LO = -5;
-    private double[] value;
-    private double fitness;
+     /**********************
+     *  hyperparameters   *
+     **********************/
     //non static, so that different individuals can mutate at different rates
-    private float mutationP = 1/RealGenotype.D;
-    // species tag
-    private int species = 1;
+    private float              AllelMutationP = 1/RealGenotype.D;
 
+    /**********************
+     *  local variables   *
+     **********************/
 
+    public enum MutationType{   }
+    public static final int    D              = 10; //solution space dimensionality
+    public static final double DOMAIN_HI      = 5;
+    public static final double DOMAIN_LO      = -5;
+    private double[]           value;
+    private double             fitness;
+    private int                species        = 1;  // species tag
+    Random                     r              = new Random();
+    
     /**
      * Empty constructor. Creates a genotype with double values uniformly distributed in [0, 1]
      * */
     public RealGenotype() {
         this.fitness = -1;
-        Random r = new Random();
         value = new double[RealGenotype.D];
         for(int i = 0; i < RealGenotype.D; i++){
             value[i] = (RealGenotype.DOMAIN_HI - RealGenotype.DOMAIN_LO)*r.nextDouble() +
@@ -48,12 +53,12 @@ public class RealGenotype {
             valueRangeHi = RealGenotype.DOMAIN_HI;
             valueRangeLo = RealGenotype.DOMAIN_LO;
         }
-        Random r = new Random();
         value = new double[RealGenotype.D];
         for(int i = 0; i < RealGenotype.D; i++){
             value[i] = (valueRangeHi-valueRangeLo)*r.nextDouble() + valueRangeLo;
         }
     }
+
     /**
      * Copy constructor. Creates a genotype with a given value
      * */
@@ -65,6 +70,7 @@ public class RealGenotype {
         }
         value = gen;
     }
+
     @Override
     public String toString(){
         String stringRep = "[";
@@ -75,33 +81,27 @@ public class RealGenotype {
         }
         return stringRep + "]";
     }
-    public void setMutationP(float newP){this.mutationP=newP;}
-    public float getMutationP(){return this.mutationP;}
-    public double[] getValue(){return value;}
-    public double getFitness(){return this.fitness;}
-    public int getSpecies(){return this.species;}
-    public void setSpecies(int species_){this.species=species_;}
-    public void setFitness(double fitness){this.fitness = fitness;}
+
     /**
-     * Uniform mutation. Each allele has mutationP probability of being changed to a new value, uniformly
+     * Uniform mutation. Each allele has allelMutationP probability of being changed to a new value, uniformly
      * distributed in [lo, hi]
      * */
     public RealGenotype mutate(){
-        Random r = new Random();
         for(int i = 0; i < RealGenotype.D; i++){
-            if(r.nextFloat() < this.mutationP)
-                this.value[i] = (RealGenotype.DOMAIN_HI - RealGenotype.DOMAIN_LO)*r.nextDouble() + RealGenotype.DOMAIN_LO;
+            if(r.nextFloat() < this.allelMutationP)
+                this.value[i] = ((RealGenotype.DOMAIN_HI - RealGenotype.DOMAIN_LO) * r.nextDouble()
+				 + RealGenotype.DOMAIN_LO);
         }
         return this;
     }
+
     /**
      * Creep (gaussian) mutation. Every allele is added a random normal distributed number with sigma
      * deviation
      * */
     public RealGenotype mutate(double sigma){
-        Random r = new Random(); 
         for(int i = 0; i < RealGenotype.D; i++){
-            if(r.nextDouble()<0.25){
+            if(r.nextDouble()<this.allelMutationP){
                 double increment;
                 do{
                     increment = r.nextGaussian()*sigma;
@@ -111,11 +111,11 @@ public class RealGenotype {
         }
         return this;
     }
+
     /** 
      * 1-point crossover breeding function
      **/
     public static RealGenotype breed1(RealGenotype mom, RealGenotype dad){
-        Random r = new Random();
         int cut = r.nextInt(10);
         RealGenotype kid = new RealGenotype();
         for(int i=0; i<kid.getValue().length; i++){
@@ -127,6 +127,7 @@ public class RealGenotype {
         }
         return kid;
     }
+
     /**
      * Takes  two RealGenotypes that act as parents and returns a
      * RealGenotype kid that is a combination of both parents. An allel of a parent
@@ -135,7 +136,6 @@ public class RealGenotype {
      **/
     public static RealGenotype breed2(RealGenotype mom, RealGenotype dad){
         RealGenotype kid = new RealGenotype();
-        Random r = new Random();
         for(int i=0; i<kid.getValue().length; i++){
             if(r.nextDouble() <= mom.getFitness()/(mom.getFitness()+dad.getFitness())){
                 kid.getValue()[i] = mom.getValue()[i];
@@ -147,7 +147,15 @@ public class RealGenotype {
     }
 
     public void setRandomSpecies(int no_of_species){
-        Random r = new Random();
         species = ThreadLocalRandom.current().nextInt(1, no_of_species + 1);
     }
+
+    public void setMutationP(float newP){this.allelMutationP=newP;}
+    public float getMutationP(){return this.allelMutationP;}
+    public double[] getValue(){return value;}
+    public double getFitness(){return this.fitness;}
+    public int getSpecies(){return this.species;}
+    public void setSpecies(int species_){this.species=species_;}
+    public void setFitness(double fitness){this.fitness = fitness;}
+
 }
