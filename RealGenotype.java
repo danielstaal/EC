@@ -43,8 +43,8 @@ public class RealGenotype {
         if(valueRangeHi > RealGenotype.DOMAIN_HI || valueRangeLo < RealGenotype.DOMAIN_LO ||
            valueRangeHi <= RealGenotype.DOMAIN_LO){
             //TODO: do this with a Logger instead: http://www.vogella.com/tutorials/Logging/article.html
-            System.out.println("Invalid range. Upper: " + valueRangeHi + ". Lower: " + valueRangeLo);
-            System.out.println("Using default bounds");
+            // System.out.println("Invalid range. Upper: " + valueRangeHi + ". Lower: " + valueRangeLo);
+            // System.out.println("Using default bounds");
             valueRangeHi = RealGenotype.DOMAIN_HI;
             valueRangeLo = RealGenotype.DOMAIN_LO;
         }

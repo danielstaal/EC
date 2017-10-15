@@ -43,7 +43,7 @@ public class Population
 
 
     private void setHyperparameters(){
-        System.out.println(evaluationType);
+        // System.out.println(evaluationType);
         if((Boolean)evaluationType.get("Multimodal")){
             populationSize = 100;
             selection_std = 30;
@@ -78,7 +78,7 @@ public class Population
     
         // System.out.println(population.get(populationSize-1).getFitness());
 
-        countSpecies();
+        // countSpecies();
     }
 
     private void selection(){
