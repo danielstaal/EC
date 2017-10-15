@@ -1,19 +1,22 @@
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.Random;
 import org.vu.contest.ContestEvaluation;
 import java.util.Collections;
 import java.util.Map;
-import java.util.HashMap;
-import java.util.Hashtable;
 
 public class Population
 {
-    private ArrayList<RealGenotype> population = new ArrayList<RealGenotype>(); 
+    private ArrayList<RealGenotype> population = new ArrayList<>();
     private int noOfSurvivors = 0;
     private Map  evaluationType;
     private double evaluationLimit = 0.0;
     ContestEvaluation evaluation_;
+    private boolean FITNESS_SHARING = false;
+    private double fSSigmaDistance = 1; // neighborhood radius for fitness sharing
+    private double fSAlpha = 1; // alpha parameter of fitness sharing. Controlls how much
+    // do neighbors punish fitness, set in ]0, inf[
+    private double[][] fSDistances;
+    private double[] fSFitness;
 
     private int no_of_species = 4;
 
@@ -66,6 +69,16 @@ public class Population
         for(int i=0;i<populationSize;i++){
             population.add(new RealGenotype(-5,5));
         }
+        if(this.FITNESS_SHARING)
+            this.initfS();
+    }
+    /**
+     * Initializes all fitness sharing related variables
+     */
+    private void initfS(){
+        this.fSDistances = new double[populationSize][populationSize];
+        this.fSFitness = new double[populationSize];
+        this.fSCalculateFitness();
     }
 
     public void nextGeneration(){
@@ -75,10 +88,19 @@ public class Population
         // recombination, mutation
         recombine();
         mutate();
+<<<<<<< HEAD
     
         // System.out.println(population.get(populationSize-1).getFitness());
+=======
+    }
+>>>>>>> c4477a30f101e79385788e3e2fc4b5251e572946
 
-        // countSpecies();
+    private void fSCalculateDistances(){
+        for(int r = 0; r < populationSize; r++){
+            for(int c = 0; c < populationSize; c++){
+                this.fSDistances[r][c] = this.fSDistance(this.population.get(r), this.population.get(c));
+            }
+        }
     }
 
     private void selection(){
@@ -90,6 +112,8 @@ public class Population
         // population.sort(Comparator.comparing(RealGenotype::getFitness));
         Collections.sort(population,
                 (o1, o2) ->  Double.compare(o1.getFitness(), o2.getFitness()));
+        if(this.FITNESS_SHARING == true)
+                this.fSCalculateFitness();
     }
 
     private void recombine(){
@@ -115,6 +139,8 @@ public class Population
             new_population.add(population.get(i));
         }
         population = new_population;
+        if(this.FITNESS_SHARING == true)
+            this.fSCalculateFitness();
     }
     
     // 
@@ -128,6 +154,8 @@ public class Population
                 }
             }
         }
+        if(this.FITNESS_SHARING)
+            this.fSCalculateFitness();
     }
     
     public ArrayList<RealGenotype> getPopulation(){
@@ -151,15 +179,72 @@ public class Population
         return false;
     }
 
-    private void countSpecies(){
+    private void countSpecies() {
         int[] counts = new int[no_of_species];
-        for(int i=0;i<populationSize;i++){
-            counts[population.get(i).getSpecies()-1] += 1;
+        for (int i = 0; i < populationSize; i++) {
+            counts[population.get(i).getSpecies() - 1] += 1;
         }
-        for(int j=0;j<no_of_species;j++){
+        for (int j = 0; j < no_of_species; j++) {
             System.out.print(counts[j]);
             System.out.print(" ");
         }
         System.out.println("");
+    }
+
+    private void fSCalculateFitness(){
+        this.fSCalculateDistances();
+        double newFitness;
+        ArrayList<Integer> neighbors;
+        for(int i = 0; i < this.populationSize; i++){
+            newFitness = 0;
+            neighbors = this.getFSNeighbors(i);
+            for(int n : neighbors){
+                newFitness += (1 - Math.pow(this.fSDistances[i][n]/this.fSSigmaDistance, this.fSAlpha));
+            }
+            newFitness = this.population.get(i).getFitness()/newFitness;
+            this.fSFitness[i] = newFitness;
+        }
+    }
+
+    /**
+     * Finds the neighbors of a given member of the population, based on the fSDistance
+     * @param i index in the population array of the member of the population whose
+     *          neighbors are to be found
+     * @return ArrayList with the indices in the population array of the neighbors
+     * */
+    private ArrayList<Integer> getFSNeighbors(int i){
+        ArrayList<Integer> neighbors = new ArrayList<>();
+        for(int c = 0; c < this.populationSize; c++){
+            if(this.fSDistances[i][c] < this.fSSigmaDistance) {
+                neighbors.add(c);
+            }
+        }
+        return neighbors;
+    }
+
+    /**
+     * calculates euclidean distance between two arrays
+     * */
+    private double fSDistance(RealGenotype a, RealGenotype b)
+    {
+        double distance = 0;
+        for(int i=0;i<RealGenotype.D;i++){
+            distance += Math.pow((a.getValue()[i] - b.getValue()[i]),2);
+        }
+        return Math.sqrt(distance);
+    }
+
+    public void setFitness_sharing(boolean fs){
+        this.FITNESS_SHARING = fs;
+        if (fs)
+            this.initfS();
+    }
+    public void setFSSigmaDistance(double sigma){
+        assert sigma > 0: "fitness sharing sigma must be positive, got " + sigma;
+        this.fSSigmaDistance = sigma;
+    }
+    public void setFSAlpha(double alpha){
+        assert alpha > 0: "fitness sharing sigma must be positive, got " + alpha;
+        this.fSAlpha = alpha;
     }
 }

@@ -3,10 +3,8 @@ import org.vu.contest.ContestEvaluation;
 
 import java.util.Random;
 import java.util.Properties;
-import java.lang.Math;
 import java.util.Map;
 import java.util.HashMap;
-import java.util.Hashtable;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -19,16 +17,13 @@ import java.io.IOException;
 
 public class group39 implements ContestSubmission
 {
-    Random rnd_;
-    ContestEvaluation evaluation_;
-
     private static final int dimensions = 10;
-
     private static final boolean speciation = true;
-
+	private Random rnd_;
+    private ContestEvaluation evaluation_;
     private int evaluations_limit_;
 
-    private Map<String, Boolean> evaluationType = new HashMap<String, Boolean>();
+    private Map<String, Boolean> evaluationType = new HashMap<>();
 
         
 
@@ -63,14 +58,6 @@ public class group39 implements ContestSubmission
         evaluationType.put("Multimodal", isMultimodal);
         evaluationType.put("Regular", hasStructure);
         evaluationType.put("Separable", isSeparable);
-    }
-
-    private double distance(double[] coor1, double[] coor2){
-        double distance = 0.0;
-        for(int i=0;i<dimensions;i++){
-            distance += Math.pow((coor1[i] - coor2[i]),2);
-        }
-        return Math.sqrt(distance);
     }
     
     public void test(){
