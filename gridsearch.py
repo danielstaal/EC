@@ -1,6 +1,6 @@
 import itertools
 import subprocess
-
+import sys
 
 
 
@@ -10,33 +10,60 @@ import subprocess
 
 if __name__ == '__main__':
 
-    subprocess.run(['javac', '-cp', 'contest.jar', 'group39.java', 'RealGenotype.java', 'Population.java'])
-    subprocess.run(['jar', 'cmf', 'MainClass.txt', 'submission.jar', 'group39.class', 'RealGenotype.class', 'Population.class'])
+    subprocess.run(['javac', '-cp', 'contest.jar', 'group39.java', 'Genotype.java', 'Population.java', 'Species.java'])
+    subprocess.run(['jar', 'cmf', 'MainClass.txt', 'submission.jar', 'group39.class', 'Genotype.class', 'Population.class', 'Species.class'])
     
-    populationSize = ['1','2','3','4']
-    speciation = ['true', 'false']
-    alpha = ["0.1", '0.2', '0.3', '0.4', '0.5']
-    sigma = ['x', 'y', 'z']
+    ## list of each hyperparameter value we want to test
+    populationSize = ['5','20','50','100']
+    # speciation = ['true', 'false']
+    maxPopDistance = ['0.2','0.4', '0.6', '0.8', '1.0']
+    # fitnessSharing = ['true', 'false']
+    # mutationP
+    # mutationStdStart
+    # mutationStdEnd
 
-    hyperparams = [populationSize, speciation, alpha, sigma]
+
+    # list of hyperparameters
+    hyperparams = [populationSize, maxPopDistance]
+    hyperparams_names = ['populationSize', 'maxPopDistance']
+    # evaluationType = 'BentCigarFunction'
+    # evaluationType = 'KatsuuraEvaluation'
+    evaluationType = 'SchaffersEvaluation'
 
 
 
+    # make all permutations of the values of the hyperparams
     combinations = list(itertools.product(*hyperparams))
 
-    for combination in combinations[:1]:
+
+    f = open("results/" + evaluationType + ".txt", 'w')
+    f.write("Score Time(ms) ")
+    for name in hyperparams_names:
+        f.write(name + " ")
+    f.write(evaluationType + "\n")
+
+    for j, combination in enumerate(combinations):
+
+        # print("no_of_iterations = ", j)
+        sys.stdout.write("\rno_of_runs = %i" % j)
+        sys.stdout.flush()
         java_exe_line = ["java"]
+        argumentValues = ''
         for i, hyperparam in enumerate(combination):
-            java_exe_line.append("var" + str(i) + "=" + str(hyperparam))
-        java_exe_line.extend(["-jar","testrun.jar", "-submission=group39", "-evaluation=BentCigarFunction", "-seed=1"])
+            hp = hyperparams_names[i] + "=" + str(hyperparam)
+            argumentValues += str(hyperparam) + ' '
+            java_exe_line.append('-D' + hp)
+        java_exe_line.extend(["-jar","testrun.jar", "-submission=player39", "-evaluation=" + evaluationType, "-seed=1"])
 
-        print(java_exe_line)
+        test = subprocess.Popen(java_exe_line, stdout=subprocess.PIPE)
+        output = test.communicate()[0]
 
+        output_string = output.decode("utf-8")
 
+        write_output = output_string.split("\n")
+        score = write_output[0]
+        runtime = write_output[1][:-1]
 
+        f.write(score.split(':')[1][1:] + runtime.split(':')[1][:-1] + " " + argumentValues + '\n')
 
-
-        # test = subprocess.Popen(["ping","-W","2","-c", "1", "192.168.1.70"], stdout=subprocess.PIPE)
-        # output = test.communicate()[0]
-
-
+    f.close()

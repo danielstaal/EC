@@ -6,14 +6,14 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.Hashtable;
 
-public class group39 implements ContestSubmission
+public class player39 implements ContestSubmission
 {
     Random rnd_;
     ContestEvaluation evaluation_;
     private int evaluationsLimit_;
     private Map<String, Boolean> evaluationType = new HashMap<String, Boolean>();
     
-    public group39()
+    public player39()
     {
         rnd_ = new Random();
     }
@@ -44,9 +44,17 @@ public class group39 implements ContestSubmission
         evaluationType.put("Separable", isSeparable);      
     }
     
-    public void run()
-    {
-        Population p = new Population(evaluationsLimit_, evaluation_, evaluationType);
+    public void run(){
+        // reading in the passed arguments
+        // int popSize = Integer.parseInt(System.getProperty("populationSize"));
+        // boolean speciation = Boolean.parseBoolean(System.getProperty("speciation"));
+        // double maxPopDistance = Double.parseDouble(System.getProperty("maxPopDistance"));
+
+        int popSize = 20;
+        double maxPopDistance = 0.5;
+
+
+        Population p = new Population(evaluationsLimit_, evaluation_, evaluationType, popSize, maxPopDistance);
 
         int i = 0;
         while(true){
