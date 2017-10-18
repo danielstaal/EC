@@ -33,8 +33,9 @@ public class Population
     static  Random               r                   = new Random();
 
     
+    public Population(int evaluationsLimit, ContestEvaluation evaluation, Map evaluationType
+		     , int popSize, double maxPopD){
 
-    public Population(int evaluationsLimit, ContestEvaluation evaluation, Map evaluationType){
         evaluation_       = evaluation;
         evaluationType_   = evaluationType;
         evaluationsLimit_ = evaluationsLimit;
