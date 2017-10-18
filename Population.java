@@ -84,11 +84,11 @@ public class Population
         boolean matched;
         for(Genotype g : population_){
             matched = false;
-            for(Species sp : species_){
-                if(distance(g, sp.prototype_) <= maxPopDistance){
-                    sp.members_.add(g);
+            if(!species_.isEmpty()) {
+                Species best_match = getMostSimilarSpecies(g, species_);
+                if (distance(g, best_match.prototype_) <= maxPopDistance) {
+                    best_match.members_.add(g);
                     matched = true;
-                    break;
                 }
             }
             if(!matched){
@@ -103,9 +103,13 @@ public class Population
         }
     }
 
+    public static Species getMostSimilarSpecies(Genotype individual, ArrayList<Species> species_list){
+        return Collections.min(species_list, (s1, s2) ->  Double.compare(
+                distance(individual, s1.prototype_),distance(individual, s2.prototype_)));
+    }
     
     // Returns the distance between two Genomes
-    public double distance(Genotype a, Genotype b){
+    public static double distance(Genotype a, Genotype b){
         double distance = 0;
         for(int i = 0; i<NO_VARIABLES; i++){
             distance += Math.pow(a.genome_[i] - b.genome_[i], 2);

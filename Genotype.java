@@ -72,5 +72,15 @@ public class Genotype
             }
         }
         return this;
-    }    
+    }
+    @Override
+    public String toString(){
+        String stringRep = "[";
+        for(int i = 0; i < NO_VARIABLES; i++){
+            stringRep += this.genome_[i];
+            if(i < NO_VARIABLES - 1)
+                stringRep += " ";
+        }
+        return stringRep + "]";
+    }
 }
