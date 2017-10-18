@@ -10,16 +10,21 @@ import sys
 
 if __name__ == '__main__':
 
+    # compile
     subprocess.run(['javac', '-cp', 'contest.jar', 'group39.java', 'Genotype.java', 'Population.java', 'Species.java'])
     subprocess.run(['jar', 'cmf', 'MainClass.txt', 'submission.jar', 'group39.class', 'Genotype.class', 'Population.class', 'Species.class'])
     
-
+    ## list of each hyperparameter value we want to test
     populationSize = ['5','20','50','100']
     # speciation = ['true', 'false']
     maxPopDistance = ['0.2','0.4', '0.6', '0.8', '1.0']
     # fitnessSharing = ['true', 'false']
+    # mutationP
+    # mutationStdStart
+    # mutationStdEnd
 
 
+    # list of hyperparameters 
     hyperparams = [populationSize, maxPopDistance]
     hyperparams_names = ['populationSize', 'maxPopDistance']
     # evaluationType = 'BentCigarFunction'
@@ -28,11 +33,11 @@ if __name__ == '__main__':
 
 
 
-
+    # make all permutations of the values of the hyperparams
     combinations = list(itertools.product(*hyperparams))
 
-    f = open("results/" + evaluationType + ".txt", 'w')
 
+    f = open("results/" + evaluationType + ".txt", 'w')
     f.write("Score Time(ms) ")
     for name in hyperparams_names:
         f.write(name + " ")
