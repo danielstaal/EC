@@ -17,14 +17,14 @@ if __name__ == '__main__':
     populationSize = ['5','20','50','100']
     # speciation = ['true', 'false']
     maxPopDistance = ['0.2','0.4', '0.6', '0.8', '1.0']
-    fitnessSharing = ['true', 'false']
+    # fitnessSharing = ['true', 'false']
 
 
     hyperparams = [populationSize, maxPopDistance]
     hyperparams_names = ['populationSize', 'maxPopDistance']
-    evaluationType = 'BentCigarFunction'
+    # evaluationType = 'BentCigarFunction'
     # evaluationType = 'KatsuuraEvaluation'
-    # evaluationType = 'SchaffersEvaluation'
+    evaluationType = 'SchaffersEvaluation'
 
 
 
