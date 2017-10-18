@@ -1,1 +1,1 @@
-Main-Class: group39
+Main-Class: player39

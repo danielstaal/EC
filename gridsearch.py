@@ -10,7 +10,6 @@ import sys
 
 if __name__ == '__main__':
 
-    # compile
     subprocess.run(['javac', '-cp', 'contest.jar', 'group39.java', 'Genotype.java', 'Population.java', 'Species.java'])
     subprocess.run(['jar', 'cmf', 'MainClass.txt', 'submission.jar', 'group39.class', 'Genotype.class', 'Population.class', 'Species.class'])
     
@@ -24,7 +23,7 @@ if __name__ == '__main__':
     # mutationStdEnd
 
 
-    # list of hyperparameters 
+    # list of hyperparameters
     hyperparams = [populationSize, maxPopDistance]
     hyperparams_names = ['populationSize', 'maxPopDistance']
     # evaluationType = 'BentCigarFunction'
@@ -54,7 +53,7 @@ if __name__ == '__main__':
             hp = hyperparams_names[i] + "=" + str(hyperparam)
             argumentValues += str(hyperparam) + ' '
             java_exe_line.append('-D' + hp)
-        java_exe_line.extend(["-jar","testrun.jar", "-submission=group39", "-evaluation=" + evaluationType, "-seed=1"])
+        java_exe_line.extend(["-jar","testrun.jar", "-submission=player39", "-evaluation=" + evaluationType, "-seed=1"])
 
         test = subprocess.Popen(java_exe_line, stdout=subprocess.PIPE)
         output = test.communicate()[0]
