@@ -44,9 +44,16 @@ public class group39 implements ContestSubmission
         evaluationType.put("Separable", isSeparable);      
     }
     
-    public void run()
-    {
-        Population p = new Population(evaluationsLimit_, evaluation_, evaluationType);
+    public void run(){
+        // reading in the passed arguments
+        int popSize = Integer.parseInt(System.getProperty("populationSize"));
+        // boolean speciation = Boolean.parseBoolean(System.getProperty("speciation"));
+        float maxPopDistance = Float.parseFloat(System.getProperty("maxPopDistance"));
+
+
+
+
+        Population p = new Population(evaluationsLimit_, evaluation_, evaluationType, popSize, maxPopDistance);
 
         int i = 0;
         while(true){
