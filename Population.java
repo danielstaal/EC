@@ -119,7 +119,7 @@ public class Population
             nExpectedOffspring += sp.nOffspring_;
         }
 	while(populationSize_ != nExpectedOffspring){ //add or subtract offspring until desired popsize is reached
-            if(populationSize_ > nExpectedOffsprin){
+            if(populationSize_ > nExpectedOffspring){
 		species_.get(r.nextInt(species_.size())).nOffspring_ += 1;
 		++nExpectedOffspring;
 	    } else{
