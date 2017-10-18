@@ -14,11 +14,12 @@ public class Population
     /*********************
      *  hyperparameters  *
      *********************/
-    static int                   populationSize_     = 20;
+    static int                   populationSize_     = 100;
     static int                   NO_VARIABLES        = 10;
-    double                       maxPopDistance      = 0.5; // maximum distance to population centroid
-    boolean                      fitnessSharing      = true;
-    
+    boolean                      fitnessSharing      = false;
+    boolean                      speciate            = false;
+    double                       maxPopDistance      = 0.3;// maximum distance to population centroid    
+
     /*********************
      *  local variables  *
      *********************/
@@ -32,8 +33,9 @@ public class Population
     static  Random               r                   = new Random();
 
     
-    public Population(int evaluationsLimit, ContestEvaluation evaluation, Map evaluationType, int popSize, double maxPopD)
-    {
+    public Population(int evaluationsLimit, ContestEvaluation evaluation, Map evaluationType
+		     , int popSize, double maxPopD){
+
         evaluation_       = evaluation;
         evaluationType_   = evaluationType;
         evaluationsLimit_ = evaluationsLimit;
@@ -66,6 +68,7 @@ public class Population
                 }
             }
             sp.sort();
+	    sp.prototype_ = sp.members_.get(0); // Make the fittest member of a species its prototype
         }
         sortPopulation();
         return true;
@@ -77,6 +80,12 @@ public class Population
 
     
     public void speciate(){
+	if(speciate == false){  //if speciation is turned off, only create one species and add entire population
+	    species_.clear();
+	    species_.add(new Species(population_.get(0)));
+	    species_.get(0).members_.addAll(population_.subList(1, population_.size()));
+	    return;
+	}
         for(Species sp : species_){  // clear all species (but retain their prototypes)
             sp.members_.clear();
             sp.age_++;
@@ -95,12 +104,7 @@ public class Population
                 species_.add(new Species(g));
             }
         }
-        // Remove empty species.
-        species_.removeIf(sp -> sp.members_.isEmpty());
-        // Assign random prototype to each species.
-        for(Species sp : species_){
-            sp.prototype_ = sp.members_.get(r.nextInt(sp.members_.size()));
-        }
+        species_.removeIf(sp -> sp.members_.isEmpty());  // Remove empty species.
     }
 
     public static Species getMostSimilarSpecies(Genotype individual, ArrayList<Species> species_list){
@@ -125,10 +129,14 @@ public class Population
             sp.nOffspring_ = (int) (Math.round(populationSize_ * sp.fitness_ / fitness_));
             nExpectedOffspring += sp.nOffspring_;
         }
-        for(int sign=Integer.signum(populationSize_ - nExpectedOffspring); populationSize_
-                != nExpectedOffspring; ){
-            species_.get(r.nextInt(species_.size())).nOffspring_ += sign;
-            nExpectedOffspring += sign;
+	while(populationSize_ != nExpectedOffspring){ //add or subtract offspring until desired popsize is reached
+            if(populationSize_ > nExpectedOffspring){
+		species_.get(r.nextInt(species_.size())).nOffspring_ += 1;
+		++nExpectedOffspring;
+	    } else{
+		species_.get(r.nextInt(species_.size())).nOffspring_ -= 1;
+		--nExpectedOffspring;
+	    }
         }
     }
 
@@ -136,7 +144,6 @@ public class Population
     public void generateNextGen(){
         population_.clear();
         for(int i=0; i<species_.size(); i++){
-            species_.get(i).sort();
             species_.get(i).generateOffspring();
             population_.addAll(species_.get(i).members_);
         }
