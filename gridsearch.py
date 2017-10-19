@@ -6,8 +6,8 @@ import os
 
 if __name__ == '__main__':
 
-    subprocess.run(['javac', '-cp', 'contest.jar', 'group39.java', 'Genotype.java', 'Population.java', 'Species.java'])
-    subprocess.run(['jar', 'cmf', 'MainClass.txt', 'submission.jar', 'group39.class', 'Genotype.class', 'Population.class', 'Species.class'])
+    subprocess.run(['javac', '-cp', 'contest.jar', 'player39.java', 'Genotype.java', 'Population.java', 'Species.java'])
+    subprocess.run(['jar', 'cmf', 'MainClass.txt', 'submission.jar', 'player39.class', 'Genotype.class', 'Population.class', 'Species.class'])
     
     ## list of each hyperparameter value we want to test
     populationSize = ['5','20','50','100']

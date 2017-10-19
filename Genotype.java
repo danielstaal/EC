@@ -1,4 +1,6 @@
 import java.util.Random;
+
+
 public class Genotype
 {
 
@@ -8,15 +10,11 @@ public class Genotype
     public static int           NO_VARIABLES;
     public static double        DOMAIN_HI        = 5;
     public static double        DOMAIN_LO        = -5;
-<<<<<<< HEAD
+
     public static double               mutationP        = 4.0/NO_VARIABLES; // probability that an allel gets mutated
     private static double              mutationStdStart = 0.05;  // mutation standard dev. at start
     private static double              mutationStdEnd   = 0.0001; // mutation standard dev. at finish
-=======
-    public double               mutationP        = 3.0/NO_VARIABLES; // probability that an allel gets mutated
-    private double              mutationStdStart = 0.05;  // mutation standard dev. at start
-    private double              mutationStdEnd   = 0.001; // mutation standard dev. at finish
->>>>>>> 5abd9db218f055acb44d7a2a32586f5c9c87292c
+
 
     /********************
      *   local variables *
@@ -50,23 +48,9 @@ public class Genotype
      * Takes two Genotypes that act as parents and returns a Genotype kid that is a combination of both parents.
      * An allel of a parent is selected with a probability proportional to the fitness of that parent. 
      **/
-<<<<<<< HEAD
     public static Genotype breed(Genotype mom,Genotype dad)
     {
         Genotype kid = new Genotype(NO_VARIABLES, mutationP, mutationStdStart, mutationStdEnd);
-=======
-    // public static Genotype breed(Genotype mom,Genotype dad){
-    //     Genotype kid = new Genotype(NO_VARIABLES);
-    //     for(int i=0; i<kid.genome_.length; i++){
-    //         kid.genome_[i]= (mom.genome_[i] *  mom.fitness_/(mom.fitness_+dad.fitness_)
-    // 			    + dad.genome_[i] *  dad.fitness_/(mom.fitness_+dad.fitness_));
-    // 	}
-    // 	return kid;
-    // }
-
-    public static Genotype breed(Genotype mom,Genotype dad){
-        Genotype kid = new Genotype(NO_VARIABLES);
->>>>>>> 5abd9db218f055acb44d7a2a32586f5c9c87292c
         for(int i=0; i<kid.genome_.length; i++){
             if(r.nextDouble() <= mom.fitness_/(mom.fitness_+dad.fitness_)){
                 kid.genome_[i] = mom.genome_[i];

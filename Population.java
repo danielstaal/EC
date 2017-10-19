@@ -33,16 +33,11 @@ public class Population
     static  Random               r                   = new Random();
 
     
-<<<<<<< HEAD
     public Population(int evaluationsLimit, ContestEvaluation evaluation,
      Map evaluationType, int popSize, double maxPopD, boolean fitnessS,
      double mP, double mStdStart, double mStdEnd)
     {
-=======
-    public Population(int evaluationsLimit, ContestEvaluation evaluation, Map evaluationType
-		     , int popSize, double maxPopD){
 
->>>>>>> 5abd9db218f055acb44d7a2a32586f5c9c87292c
         evaluation_       = evaluation;
         evaluationType_   = evaluationType;
         evaluationsLimit_ = evaluationsLimit;
@@ -139,12 +134,12 @@ public class Population
         }
 	while(populationSize_ != nExpectedOffspring){ //add or subtract offspring until desired popsize is reached
             if(populationSize_ > nExpectedOffspring){
-		species_.get(r.nextInt(species_.size())).nOffspring_ += 1;
-		++nExpectedOffspring;
-	    } else{
-		species_.get(r.nextInt(species_.size())).nOffspring_ -= 1;
-		--nExpectedOffspring;
-	    }
+        		species_.get(r.nextInt(species_.size())).nOffspring_ += 1;
+        		++nExpectedOffspring;
+    	    } else{
+        		species_.get(r.nextInt(species_.size())).nOffspring_ -= 1;
+        		--nExpectedOffspring;
+        	}
         }
     }
 
