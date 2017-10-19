@@ -45,16 +45,17 @@ public class group39 implements ContestSubmission
     }
     
     public void run(){
-        // reading in the passed arguments
-        // int popSize = Integer.parseInt(System.getProperty("populationSize"));
+        //// reading in the passed arguments
+        int popSize = Integer.parseInt(System.getProperty("populationSize"));
         // boolean speciation = Boolean.parseBoolean(System.getProperty("speciation"));
-        // double maxPopDistance = Double.parseDouble(System.getProperty("maxPopDistance"));
+        double maxPopDistance = Double.parseDouble(System.getProperty("maxPopDistance"));
+        boolean fitnessSharing = Boolean.parseBoolean(System.getProperty("fitnessSharing"));
+        double mP = Double.parseDouble(System.getProperty("mP"));
+        double mStdStart = Double.parseDouble(System.getProperty("mStdStart"));
+        double mStdEnd = Double.parseDouble(System.getProperty("mStdEnd"));
 
-        int popSize = 20;
-        double maxPopDistance = 0.5;
-
-
-        Population p = new Population(evaluationsLimit_, evaluation_, evaluationType, popSize, maxPopDistance);
+        Population p = new Population(evaluationsLimit_, evaluation_, evaluationType,
+         popSize, maxPopDistance, fitnessSharing, mP, mStdStart, mStdEnd);
 
         int i = 0;
         while(true){

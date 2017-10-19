@@ -8,9 +8,9 @@ public class Genotype
     public static int           NO_VARIABLES;
     public static double        DOMAIN_HI        = 5;
     public static double        DOMAIN_LO        = -5;
-    public double               mutationP        = 4.0/NO_VARIABLES; // probability that an allel gets mutated
-    private double              mutationStdStart = 0.05;  // mutation standard dev. at start
-    private double              mutationStdEnd   = 0.0001; // mutation standard dev. at finish
+    public static double               mutationP        = 4.0/NO_VARIABLES; // probability that an allel gets mutated
+    private static double              mutationStdStart = 0.05;  // mutation standard dev. at start
+    private static double              mutationStdEnd   = 0.0001; // mutation standard dev. at finish
 
     /********************
      *   local variables *
@@ -20,9 +20,13 @@ public class Genotype
     int               species_;
     static Random     r;
     
-    public Genotype(int noVariables)
+    public Genotype(int noVariables, double mP, double mStdStart, double mStdEnd)
     {
         NO_VARIABLES   = noVariables;
+        mutationP = mP/NO_VARIABLES;
+        mutationStdStart = mStdStart;
+        mutationStdEnd = mStdEnd;
+
         genome_       = new double[NO_VARIABLES];
         fitness_       = 0;
         species_       = 0;
@@ -42,7 +46,7 @@ public class Genotype
      **/
     public static Genotype breed(Genotype mom,Genotype dad)
     {
-        Genotype kid = new Genotype(NO_VARIABLES);
+        Genotype kid = new Genotype(NO_VARIABLES, mutationP, mutationStdStart, mutationStdEnd);
         for(int i=0; i<kid.genome_.length; i++){
             if(r.nextDouble() <= mom.fitness_/(mom.fitness_+dad.fitness_)){
                 kid.genome_[i] = mom.genome_[i];

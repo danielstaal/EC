@@ -32,19 +32,22 @@ public class Population
     static  Random               r                   = new Random();
 
     
-    public Population(int evaluationsLimit, ContestEvaluation evaluation, Map evaluationType, int popSize, double maxPopD)
+    public Population(int evaluationsLimit, ContestEvaluation evaluation,
+     Map evaluationType, int popSize, double maxPopD, boolean fitnessS,
+     double mP, double mStdStart, double mStdEnd)
     {
         evaluation_       = evaluation;
         evaluationType_   = evaluationType;
         evaluationsLimit_ = evaluationsLimit;
         evaluations       = 0;
         fitness_          = 0;
+        fitnessSharing = fitnessS;
 
         // setting passed arguments
         populationSize_ = popSize;
         maxPopDistance = maxPopD;
 
-        for(int i = 0; i<populationSize_; i++){population_.add(new Genotype(NO_VARIABLES));} //fill population
+        for(int i = 0; i<populationSize_; i++){population_.add(new Genotype(NO_VARIABLES, mP, mStdStart, mStdEnd));} //fill population
     }
 
     
