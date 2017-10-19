@@ -1,13 +1,9 @@
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.Random;
 import org.vu.contest.ContestEvaluation;
 import java.util.Map;
-import java.util.HashMap;
-import java.util.Hashtable;
 import java.lang.Math;
 import java.util.Collections;
-import java.util.Arrays;
 
 public class Population
 {
@@ -74,7 +70,7 @@ public class Population
         return true;
     }
 
-    
+
     public void sortPopulation(){
         Collections.sort(population_, (o2, o1) ->  Double.compare(o1.fitness_, o2.fitness_));}
 
@@ -129,14 +125,14 @@ public class Population
             sp.nOffspring_ = (int) (Math.round(populationSize_ * sp.fitness_ / fitness_));
             nExpectedOffspring += sp.nOffspring_;
         }
-	while(populationSize_ != nExpectedOffspring){ //add or subtract offspring until desired popsize is reached
+        while(populationSize_ != nExpectedOffspring){ //add or subtract offspring until desired popsize is reached
             if(populationSize_ > nExpectedOffspring){
-		species_.get(r.nextInt(species_.size())).nOffspring_ += 1;
-		++nExpectedOffspring;
-	    } else{
-		species_.get(r.nextInt(species_.size())).nOffspring_ -= 1;
-		--nExpectedOffspring;
-	    }
+                species_.get(r.nextInt(species_.size())).nOffspring_ += 1;
+                ++nExpectedOffspring;
+            } else{
+                species_.get(r.nextInt(species_.size())).nOffspring_ -= 1;
+                --nExpectedOffspring;
+            }
         }
     }
 
