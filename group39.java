@@ -6,14 +6,14 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.Hashtable;
 
-public class player39 implements ContestSubmission
+public class group39 implements ContestSubmission
 {
     Random rnd_;
     ContestEvaluation evaluation_;
     private int evaluationsLimit_;
     private Map<String, Boolean> evaluationType = new HashMap<String, Boolean>();
     
-    public player39()
+    public group39()
     {
         rnd_ = new Random();
     }

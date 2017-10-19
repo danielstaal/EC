@@ -1,42 +1,42 @@
 import itertools
 import subprocess
 import sys
-
-
-
-
-
+import os
 
 
 if __name__ == '__main__':
 
-    subprocess.run(['javac', '-cp', 'contest.jar', 'group39.java', 'Genotype.java', 'Population.java', 'Species.java'])
-    subprocess.run(['jar', 'cmf', 'MainClass.txt', 'submission.jar', 'group39.class', 'Genotype.class', 'Population.class', 'Species.class'])
+    subprocess.run(['javac', '-cp', 'contest.jar', 'player39.java', 'Genotype.java', 'Population.java', 'Species.java'])
+    subprocess.run(['jar', 'cmf', 'MainClass.txt', 'submission.jar', 'player39.class', 'Genotype.class', 'Population.class', 'Species.class'])
     
     ## list of each hyperparameter value we want to test
     populationSize = ['5','20','50','100']
-    # speciation = ['true', 'false']
     maxPopDistance = ['0.2','0.4', '0.6', '0.8', '1.0']
     # fitnessSharing = ['true', 'false']
-    # mutationP
-    # mutationStdStart
-    # mutationStdEnd
+    mutationP = ['0.2']#,'0.4', '0.6', '0.8', '1.0']
+    mutationStdStart = ['0.2']#,'0.4', '0.6', '0.8', '1.0']
+    mutationStdEnd = ['0.2']#,'0.4', '0.6', '0.8', '1.0']
 
-
-    # list of hyperparameters
-    hyperparams = [populationSize, maxPopDistance]
-    hyperparams_names = ['populationSize', 'maxPopDistance']
-    # evaluationType = 'BentCigarFunction'
+    # list of hyperparameters 
+    hyperparams = [populationSize, maxPopDistance, mutationP, mutationStdStart, mutationStdEnd]
+    hyperparams_names = ['populationSize', 'maxPopDistance', 'mP', 'mStdStart', 'mStdEnd']
+    evaluationType = 'BentCigarFunction'
     # evaluationType = 'KatsuuraEvaluation'
-    evaluationType = 'SchaffersEvaluation'
+    # evaluationType = 'SchaffersEvaluation'
 
 
 
     # make all permutations of the values of the hyperparams
     combinations = list(itertools.product(*hyperparams))
 
-
-    f = open("results/" + evaluationType + ".txt", 'w')
+    # open new results file
+    file_id = 0
+    file_name = "results/" + evaluationType + "_"
+    while os.path.isfile(file_name + str(file_id) + ".txt"):
+        file_id += 1
+    file_name += str(file_id) + ".txt"
+    
+    f = open(file_name, 'w')
     f.write("Score Time(ms) ")
     for name in hyperparams_names:
         f.write(name + " ")

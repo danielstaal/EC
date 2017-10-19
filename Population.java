@@ -33,20 +33,23 @@ public class Population
     static  Random               r                   = new Random();
 
     
-    public Population(int evaluationsLimit, ContestEvaluation evaluation, Map evaluationType
-		     , int popSize, double maxPopD){
+    public Population(int evaluationsLimit, ContestEvaluation evaluation,
+     Map evaluationType, int popSize, double maxPopD, boolean fitnessS,
+     double mP, double mStdStart, double mStdEnd)
+    {
 
         evaluation_       = evaluation;
         evaluationType_   = evaluationType;
         evaluationsLimit_ = evaluationsLimit;
         evaluations       = 0;
         fitness_          = 0;
+        fitnessSharing = fitnessS;
 
         // setting passed arguments
         populationSize_ = popSize;
         maxPopDistance = maxPopD;
 
-        for(int i = 0; i<populationSize_; i++){population_.add(new Genotype(NO_VARIABLES));} //fill population
+        for(int i = 0; i<populationSize_; i++){population_.add(new Genotype(NO_VARIABLES, mP, mStdStart, mStdEnd));} //fill population
     }
 
     
@@ -93,11 +96,11 @@ public class Population
         boolean matched;
         for(Genotype g : population_){
             matched = false;
-            for(Species sp : species_){
-                if(distance(g, sp.prototype_) <= maxPopDistance){
-                    sp.members_.add(g);
+            if(!species_.isEmpty()) {
+                Species best_match = getMostSimilarSpecies(g, species_);
+                if (distance(g, best_match.prototype_) <= maxPopDistance) {
+                    best_match.members_.add(g);
                     matched = true;
-                    break;
                 }
             }
             if(!matched){
@@ -107,9 +110,13 @@ public class Population
         species_.removeIf(sp -> sp.members_.isEmpty());  // Remove empty species.
     }
 
+    public static Species getMostSimilarSpecies(Genotype individual, ArrayList<Species> species_list){
+        return Collections.min(species_list, (s1, s2) ->  Double.compare(
+                distance(individual, s1.prototype_),distance(individual, s2.prototype_)));
+    }
     
     // Returns the distance between two Genomes
-    public double distance(Genotype a, Genotype b){
+    public static double distance(Genotype a, Genotype b){
         double distance = 0;
         for(int i = 0; i<NO_VARIABLES; i++){
             distance += Math.pow(a.genome_[i] - b.genome_[i], 2);
@@ -127,12 +134,12 @@ public class Population
         }
 	while(populationSize_ != nExpectedOffspring){ //add or subtract offspring until desired popsize is reached
             if(populationSize_ > nExpectedOffspring){
-		species_.get(r.nextInt(species_.size())).nOffspring_ += 1;
-		++nExpectedOffspring;
-	    } else{
-		species_.get(r.nextInt(species_.size())).nOffspring_ -= 1;
-		--nExpectedOffspring;
-	    }
+        		species_.get(r.nextInt(species_.size())).nOffspring_ += 1;
+        		++nExpectedOffspring;
+    	    } else{
+        		species_.get(r.nextInt(species_.size())).nOffspring_ -= 1;
+        		--nExpectedOffspring;
+        	}
         }
     }
 
