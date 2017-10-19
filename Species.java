@@ -8,7 +8,8 @@ class Species
     /********************
     *  hyperparameters  *
     *********************/
-    double              selectionStd = 0.4;
+    double              selectionStd           = 0.4;
+    double              percentCopiedToNextGen = 0.2; // percentage of offspring that are copies of fittest parents
 
     /********************
     *  local variables  *
@@ -34,10 +35,14 @@ class Species
     }
 
     public void generateOffspring(){
+        ArrayList<Genotype> offspring          = new ArrayList<>();
+	// number of fittest members copied into next generation
+	int                 noFittestToNextGen = (int) Math.round(nOffspring_ * percentCopiedToNextGen);
+	offspring.addAll(members_.subList(0, noFittestToNextGen-1)); // copy fittest members to next generation
+	nOffspring_                           -= noFittestToNextGen;
         Genotype            mom;
         Genotype            dad;
         Genotype            child;
-        ArrayList<Genotype> offspring = new ArrayList<>();
         int momIdx;
         int dadIdx;
         for(int i = 0; i < nOffspring_; i++){
@@ -46,7 +51,7 @@ class Species
             }while(momIdx >= members_.size());
             do{
                 dadIdx = (int) (members_.size() * Math.abs(r.nextGaussian()) * selectionStd);
-            }while(dadIdx >= members_.size());
+            }while(dadIdx != momIdx && dadIdx >= members_.size());
             mom = members_.get(momIdx);
             dad = members_.get(dadIdx);
             child = Genotype.breed(mom, dad);
