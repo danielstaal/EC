@@ -50,11 +50,7 @@ public class player39 implements ContestSubmission
         // boolean speciation = Boolean.parseBoolean(System.getProperty("speciation"));
         // double maxPopDistance = Double.parseDouble(System.getProperty("maxPopDistance"));
 
-        int popSize = 20;
-        double maxPopDistance = 0.5;
-
-
-        Population p = new Population(evaluationsLimit_, evaluation_, evaluationType, popSize, maxPopDistance);
+        Population p = new Population(evaluationsLimit_, evaluation_, evaluationType);
 
         int i = 0;
         while(true){

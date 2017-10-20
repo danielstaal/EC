@@ -10,11 +10,11 @@ public class Population
     /*********************
      *  hyperparameters  *
      *********************/
-    static int                   populationSize_     = 100;
-    static int                   NO_VARIABLES        = 10;
+    static int                   populationSize_     = 5;
+    static int                   NO_VARIABLES        = 100;
     boolean                      fitnessSharing      = false;
     boolean                      speciate            = false;
-    double                       maxPopDistance      = 0.3;// maximum distance to population centroid    
+    double                       maxPopDistance      = 0.2;// maximum distance to population centroid    
 
     /*********************
      *  local variables  *
@@ -29,19 +29,13 @@ public class Population
     static  Random               r                   = new Random();
 
     
-    public Population(int evaluationsLimit, ContestEvaluation evaluation, Map evaluationType
-		     , int popSize, double maxPopD){
+    public Population(int evaluationsLimit, ContestEvaluation evaluation, Map evaluationType){
 
         evaluation_       = evaluation;
         evaluationType_   = evaluationType;
         evaluationsLimit_ = evaluationsLimit;
         evaluations       = 0;
         fitness_          = 0;
-
-        // setting passed arguments
-        populationSize_ = popSize;
-        maxPopDistance = maxPopD;
-
         for(int i = 0; i<populationSize_; i++){population_.add(new Genotype(NO_VARIABLES));} //fill population
     }
 
