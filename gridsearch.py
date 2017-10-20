@@ -11,19 +11,22 @@ if __name__ == '__main__':
     
     ## list of each hyperparameter value we want to test
     populationSize = ['5','20','50','100']
-    maxPopDistance = ['0.2','0.4', '0.6', '0.8', '1.0']
-    # fitnessSharing = ['true', 'false']
-    mutationP = ['0.2']#,'0.4', '0.6', '0.8', '1.0']
-    mutationStdStart = ['0.2']#,'0.4', '0.6', '0.8', '1.0']
-    mutationStdEnd = ['0.2']#,'0.4', '0.6', '0.8', '1.0']
+    maxPopDistance = ['0.1','0.3', '1.0', '5.0', '10.0']
+    mutationP = ['0.1','0.3', '0.5']
+    mutationStdStart = ['0.1','0.25', '0.4']
+    mutationStdEnd = ['0.0001','0.001', '0.01']
+    # alpha = []
+
+    fitnessSharing = ['true', 'false']
+    speciation = ['true', 'false']
 
     # list of hyperparameters 
-    hyperparams = [populationSize, maxPopDistance, mutationP, mutationStdStart, mutationStdEnd]
-    hyperparams_names = ['populationSize', 'maxPopDistance', 'mP', 'mStdStart', 'mStdEnd']
+    hyperparams = [populationSize, maxPopDistance, mutationP, mutationStdStart, mutationStdEnd, fitnessSharing, speciation]
+    hyperparams_names = ['populationSize', 'maxPopDistance', 'mP', 'mStdStart', 'mStdEnd', 'fitnessSharing', 'speciation']
+    
     evaluationType = 'BentCigarFunction'
     # evaluationType = 'KatsuuraEvaluation'
     # evaluationType = 'SchaffersEvaluation'
-
 
 
     # make all permutations of the values of the hyperparams

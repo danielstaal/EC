@@ -34,8 +34,8 @@ public class Population
 
     
     public Population(int evaluationsLimit, ContestEvaluation evaluation,
-     Map evaluationType, int popSize, double maxPopD, boolean fitnessS,
-     double mP, double mStdStart, double mStdEnd)
+     Map evaluationType, int popSize, double maxPopD, double mP,
+      double mStdStart, double mStdEnd, boolean fitnessS, boolean speci)
     {
 
         evaluation_       = evaluation;
@@ -44,6 +44,7 @@ public class Population
         evaluations       = 0;
         fitness_          = 0;
         fitnessSharing = fitnessS;
+        speciate = speci;
 
         // setting passed arguments
         populationSize_ = popSize;

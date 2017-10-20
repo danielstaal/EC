@@ -1,0 +1,1 @@
+Score Time(ms) populationSize maxPopDistance mP mStdStart mStdEnd fitnessSharing speciation SchaffersEvaluation
