@@ -38,7 +38,8 @@ class Species
         ArrayList<Genotype> offspring          = new ArrayList<>();
 	// number of fittest members copied into next generation
 	int                 noFittestToNextGen = (int) Math.round(nOffspring_ * percentCopiedToNextGen);
-	offspring.addAll(members_.subList(0, noFittestToNextGen-1)); // copy fittest members to next generation
+	noFittestToNextGen                     = Math.min(noFittestToNextGen, members_.size());
+	offspring.addAll(members_.subList(0, noFittestToNextGen)); // copy fittest members to next generation
 	nOffspring_                           -= noFittestToNextGen;
         Genotype            mom;
         Genotype            dad;
