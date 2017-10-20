@@ -10,7 +10,7 @@ public class Population
     /*********************
      *  hyperparameters  *
      *********************/
-    static int                   populationSize_     = 5;
+    static int                   populationSize_     = 6;
     static int                   NO_VARIABLES        = 10;
     boolean                      fitnessSharing      = false;
     boolean                      speciate            = false;
