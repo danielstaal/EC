@@ -11,7 +11,7 @@ public class Population
      *  hyperparameters  *
      *********************/
     static int                   populationSize_     = 5;
-    static int                   NO_VARIABLES        = 100;
+    static int                   NO_VARIABLES        = 10;
     boolean                      fitnessSharing      = false;
     boolean                      speciate            = false;
     double                       maxPopDistance      = 0.2;// maximum distance to population centroid    

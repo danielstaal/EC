@@ -45,7 +45,7 @@ public class player39 implements ContestSubmission
     }
     
     public void run(){
-	boolean readParamsFromFile = false;
+	boolean readParamsFromFile = true;
 	Population p;
 	if(readParamsFromFile){
 	    int popSize            = Integer.parseInt(System.getProperty("populationSize"));
