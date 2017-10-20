@@ -46,33 +46,68 @@ public class player39 implements ContestSubmission
     }
     
     public void run(){
-	boolean readParamsFromFile = false;
-	Population p;
-	if(readParamsFromFile){
-	    int popSize            = Integer.parseInt(System.getProperty("populationSize"));
-	    double maxPopDistance  = Double.parseDouble(System.getProperty("maxPopDistance"));
-	    double mP              = Double.parseDouble(System.getProperty("mP"));
-	    double mStdStart       = Double.parseDouble(System.getProperty("mStdStart"));
-	    double mStdEnd         = Double.parseDouble(System.getProperty("mStdEnd"));
-	    boolean fitnessSharing = Boolean.parseBoolean(System.getProperty("fitnessSharing"));
-	    boolean speciation     = Boolean.parseBoolean(System.getProperty("speciation"));
-	    p       = new Population(evaluationsLimit_, evaluation_, evaluationType,popSize
-						,maxPopDistance, mP, mStdStart, mStdEnd, fitnessSharing, speciation);
-	}else{
-	    p = new Population(evaluationsLimit_, evaluation_, evaluationType);
-	}
+        int popSize;
+        double maxPopDistance;
+        double mP;
+        double mStdStart;
+        double mStdEnd;
+        boolean fitnessSharing;
+        boolean speciation;
+        if(evaluationType.get("Multimodal") == true)
+        { // Schaffers or Katsuura
+            if(evaluationType.get("Regular") == true)
+            { // Schaffers
+                popSize = 20;
+                maxPopDistance = 0.5;
+                mP = 0.2;
+                mStdStart = 0.75;
+                mStdEnd = 0.0001;
+                fitnessSharing = false;
+                speciation = false;
+            }
+            else
+            { // Katsuura
+                popSize = 100;
+                maxPopDistance = 0.5;
+                mP = 0.4;
+                mStdStart = 0.03;
+                mStdEnd = 0.00001;
+                fitnessSharing = true;
+                speciation = true;
+            }
+        }
+        else // BentCigar
+        {
+            popSize = 13;
+            maxPopDistance = 0;
+            mP = 0.3;
+            mStdStart = 0.25;
+            mStdEnd = 0.0001;
+            fitnessSharing = false;
+            speciation = false;
+        }
+            /*
+            int popSize            = Integer.parseInt(System.getProperty("populationSize"));
+            double maxPopDistance  = Double.parseDouble(System.getProperty("maxPopDistance"));
+            double mP              = Double.parseDouble(System.getProperty("mP"));
+            double mStdStart       = Double.parseDouble(System.getProperty("mStdStart"));
+            double mStdEnd         = Double.parseDouble(System.getProperty("mStdEnd"));
+            boolean fitnessSharing = Boolean.parseBoolean(System.getProperty("fitnessSharing"));
+            boolean speciation     = Boolean.parseBoolean(System.getProperty("speciation"));*/
+        Population p = new Population(evaluationsLimit_, evaluation_, evaluationType,popSize
+                            ,maxPopDistance, mP, mStdStart, mStdEnd, fitnessSharing, speciation);
 
-    int i           = 0;
-    int initialSize = p.populationSize_;
-    while(true){
-	p.speciate();
-	if(p.evaluate() == false){
-	    break;
-	}
-	p.populationSize_ = (int) Math.round((double) initialSize * p.evaluations / evaluationsLimit_) + 1;
-	p.calculateNoOffspring();
-	p.generateNextGen();
-	i++;
+        int i           = 0;
+        int initialSize = p.populationSize_;
+        while(true){
+            p.speciate();
+            if(p.evaluate() == false){
+                break;
+            }
+            p.populationSize_ = (int) Math.round((double) initialSize * p.evaluations / evaluationsLimit_) + 1;
+            p.calculateNoOffspring();
+            p.generateNextGen();
+            i++;
+        }
     }
-}
 }
