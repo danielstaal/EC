@@ -10,11 +10,11 @@ public class Population
     /*********************
      *  hyperparameters  *
      *********************/
-    static int                   populationSize_     = 6;
+    static int                   populationSize_     = 20;
     static int                   NO_VARIABLES        = 10;
     boolean                      fitnessSharing      = false;
-    boolean                      speciate            = false;
-    double                       maxPopDistance      = 0.2;// maximum distance to population centroid    
+    boolean                      speciate            = true;
+    double                       maxPopDistance      = 0.5;// maximum distance to population centroid    
 
     /*********************
      *  local variables  *

@@ -1,8 +1,3 @@
-
-
-
-
-
 def get_highest_score(lines):
     highest_score = [0,0]
     for i, line in enumerate(lines):
@@ -25,7 +20,7 @@ def sort_scores(lines):
         print(lines[i])
 
 if __name__ == '__main__':
-    f = open('assignmentfiles_2017/results/BentCigarFunction_1.txt', 'r')
+    f = open('./results/SchaffersEvaluation.txt', 'r')
 
     lines = f.readlines()[1:]
 

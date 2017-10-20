@@ -10,23 +10,23 @@ if __name__ == '__main__':
     subprocess.run(['jar', 'cmf', 'MainClass.txt', 'submission.jar', 'player39.class', 'Genotype.class', 'Population.class', 'Species.class'])
     
     ## list of each hyperparameter value we want to test
-    populationSize = ['5']#,'20']
+    populationSize = ['20']#,'20']
     maxPopDistance = ['0.1']#,'0.3', '1.0', '5.0', '10.0']
-    mutationP = ['1.0','0.3']#, '0.5']
-    mutationStdStart = ['0.1']#,'0.25', '0.4']
-    mutationStdEnd = ['0.0001']#,'0.001', '0.01']
+    mutationP = ['0.3']#, '0.5']
+    mutationStdStart = ['1.0']#,'0.25', '0.4']
+    mutationStdEnd = ['0.001']#,'0.001', '0.01']
     # alpha = []
 
-    fitnessSharing = ['true', 'false']
-    speciation = ['true', 'false']
+    fitnessSharing = ['false']
+    speciation = ['true']
 
     # list of hyperparameters 
     hyperparams = [populationSize, maxPopDistance, mutationP, mutationStdStart, mutationStdEnd, fitnessSharing, speciation]
     hyperparams_names = ['populationSize', 'maxPopDistance', 'mP', 'mStdStart', 'mStdEnd', 'fitnessSharing', 'speciation']
     
-    evaluationType = 'BentCigarFunction'
+    # evaluationType = 'BentCigarFunction'
     # evaluationType = 'KatsuuraEvaluation'
-    # evaluationType = 'SchaffersEvaluation'
+    evaluationType = 'SchaffersEvaluation'
 
     # make all permutations of the values of the hyperparams
     combinations = list(itertools.product(*hyperparams))
