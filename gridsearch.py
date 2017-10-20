@@ -10,11 +10,11 @@ if __name__ == '__main__':
     subprocess.run(['jar', 'cmf', 'MainClass.txt', 'submission.jar', 'player39.class', 'Genotype.class', 'Population.class', 'Species.class'])
     
     ## list of each hyperparameter value we want to test
-    populationSize = ['5','20','50','100']
-    maxPopDistance = ['0.1','0.3', '1.0', '5.0', '10.0']
-    mutationP = ['0.1','0.3', '0.5']
-    mutationStdStart = ['0.1','0.25', '0.4']
-    mutationStdEnd = ['0.0001','0.001', '0.01']
+    populationSize = ['5']#,'20']
+    maxPopDistance = ['0.1']#,'0.3', '1.0', '5.0', '10.0']
+    mutationP = ['1.0','0.3']#, '0.5']
+    mutationStdStart = ['0.1']#,'0.25', '0.4']
+    mutationStdEnd = ['0.0001']#,'0.001', '0.01']
     # alpha = []
 
     fitnessSharing = ['true', 'false']
@@ -28,16 +28,15 @@ if __name__ == '__main__':
     # evaluationType = 'KatsuuraEvaluation'
     # evaluationType = 'SchaffersEvaluation'
 
-
     # make all permutations of the values of the hyperparams
     combinations = list(itertools.product(*hyperparams))
 
     # open new results file
     file_id = 0
-    file_name = "results/" + evaluationType + "_"
-    while os.path.isfile(file_name + str(file_id) + ".txt"):
-        file_id += 1
-    file_name += str(file_id) + ".txt"
+    file_name = "results/" + evaluationType
+    # while os.path.isfile(file_name + str(file_id) + ".txt"):
+    #     file_id += 1
+    file_name += ".txt"
     
     f = open(file_name, 'w')
     f.write("Score Time(ms) ")
