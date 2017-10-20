@@ -12,8 +12,8 @@ public class Population
      *********************/
     static int                   populationSize_     = 100;
     static int                   NO_VARIABLES        = 10;
-    boolean                      fitnessSharing      = true;
-    boolean                      speciate            = true;
+    boolean                      fitnessSharing      = false;
+    boolean                      speciate            = false;
     double                       maxPopDistance      = 0.5;// maximum distance to population centroid    
 
     /*********************

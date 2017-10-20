@@ -69,9 +69,7 @@ public class player39 implements ContestSubmission
 	if(p.evaluate() == false){
 	    break;
 	}
-	p.populationSize_ = (int) Math.round((double) initialSize * p.evaluations / evaluationsLimit_) + 1;
-	// if(p.evaluations/evaluationsLimit_ > 0.5){p.populationSize_ = 50;}
-	// if(p.evaluations/evaluationsLimit_ > 0.75){p.populationSize_ = 20;}
+	// p.populationSize_ = (int) Math.round((double) initialSize * p.evaluations / evaluationsLimit_) + 1;
 	p.calculateNoOffspring();
 	p.generateNextGen();
 	i++;

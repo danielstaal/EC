@@ -8,7 +8,7 @@ class Species
     /********************
     *  hyperparameters  *
     *********************/
-    double              selectionStd = 0.1;
+    double              selectionStd = 0.3;
 
     /********************
     *  local variables  *
