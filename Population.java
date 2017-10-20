@@ -28,7 +28,27 @@ public class Population
     public  ArrayList<Species>   species_            = new ArrayList<>();
     static  Random               r                   = new Random();
 
-    
+    public Population(int evaluationsLimit, ContestEvaluation evaluation,
+		      Map evaluationType, int popSize, double maxPopD, double mP,
+		      double mStdStart, double mStdEnd, boolean fitnessS, boolean speci)
+    {
+
+        evaluation_       = evaluation;
+        evaluationType_   = evaluationType;
+        evaluationsLimit_ = evaluationsLimit;
+        evaluations       = 0;
+        fitness_          = 0;
+        fitnessSharing = fitnessS;
+        speciate = speci;
+
+        // setting passed arguments
+        populationSize_ = popSize;
+        maxPopDistance = maxPopD;
+	// fill population
+        for(int i = 0; i<populationSize_; i++){population_.add(new Genotype(NO_VARIABLES, mP, mStdStart, mStdEnd));}
+    }
+
+
     public Population(int evaluationsLimit, ContestEvaluation evaluation, Map evaluationType){
 
         evaluation_       = evaluation;

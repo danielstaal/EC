@@ -20,6 +20,22 @@ public class Genotype
     int               species_;
     static Random     r         = new Random();
     
+
+    public Genotype(int noVariables, double mP, double mStdStart, double mStdEnd)
+    {
+        NO_VARIABLES   = noVariables;
+        mutationP = mP/NO_VARIABLES;
+        mutationStdStart = mStdStart;
+        mutationStdEnd = mStdEnd;
+
+        genome_       = new double[NO_VARIABLES];
+        fitness_       = 0;
+        species_       = 0;
+        r              = new Random();
+        init_genome();
+    }
+
+
     public Genotype(int noVariables)
     {
         NO_VARIABLES   = noVariables;
@@ -29,6 +45,7 @@ public class Genotype
         r              = new Random();
         init_genome();
     }
+
 
     private void init_genome(){
         for(int i = 0; i<NO_VARIABLES; i++){

@@ -45,22 +45,31 @@ public class player39 implements ContestSubmission
     }
     
     public void run(){
-        // reading in the passed arguments
-        // int popSize = Integer.parseInt(System.getProperty("populationSize"));
-        // boolean speciation = Boolean.parseBoolean(System.getProperty("speciation"));
-        // double maxPopDistance = Double.parseDouble(System.getProperty("maxPopDistance"));
+	boolean readParamsFromFile = false;
+	Population p;
+	if(readParamsFromFile){
+	    int popSize            = Integer.parseInt(System.getProperty("populationSize"));
+	    double maxPopDistance  = Double.parseDouble(System.getProperty("maxPopDistance"));
+	    double mP              = Double.parseDouble(System.getProperty("mP"));
+	    double mStdStart       = Double.parseDouble(System.getProperty("mStdStart"));
+	    double mStdEnd         = Double.parseDouble(System.getProperty("mStdEnd"));
+	    boolean fitnessSharing = Boolean.parseBoolean(System.getProperty("fitnessSharing"));
+	    boolean speciation     = Boolean.parseBoolean(System.getProperty("speciation"));
+	    p       = new Population(evaluationsLimit_, evaluation_, evaluationType,popSize
+						,maxPopDistance, mP, mStdStart, mStdEnd, fitnessSharing, speciation);
+	}else{
+	    p = new Population(evaluationsLimit_, evaluation_, evaluationType);
+	}
 
-        Population p = new Population(evaluationsLimit_, evaluation_, evaluationType);
-
-        int i = 0;
-        while(true){
-            p.speciate();
-            if(p.evaluate() == false){
-                break;
-            }       
-            p.calculateNoOffspring();
-            p.generateNextGen();
-            i++;
-        }
+    int i = 0;
+    while(true){
+	p.speciate();
+	if(p.evaluate() == false){
+	    break;
+	}       
+	p.calculateNoOffspring();
+	p.generateNextGen();
+	i++;
     }
+}
 }
