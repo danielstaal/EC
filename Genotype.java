@@ -8,9 +8,9 @@ public class Genotype
     public static int           NO_VARIABLES;
     public static double        DOMAIN_HI        = 5;
     public static double        DOMAIN_LO        = -5;
-    public double               mutationP        = 3.0/NO_VARIABLES; // probability that an allel gets mutated
-    private double              mutationStdStart = 1.0;  // mutation standard dev. at start
-    private double              mutationStdEnd   = 0.001; // mutation standard dev. at finish
+    public double               mutationP        = 4.0/NO_VARIABLES; // probability that an allel gets mutated
+    private double              mutationStdStart = 0.03;  // mutation standard dev. at start
+    private double              mutationStdEnd   = 0.00001; // mutation standard dev. at finish
 
     /********************
      *   local variables *

@@ -5,6 +5,7 @@ import java.util.Properties;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Hashtable;
+import java.lang.Math;
 
 public class player39 implements ContestSubmission
 {
@@ -61,12 +62,16 @@ public class player39 implements ContestSubmission
 	    p = new Population(evaluationsLimit_, evaluation_, evaluationType);
 	}
 
-    int i = 0;
+    int i           = 0;
+    int initialSize = p.populationSize_;
     while(true){
 	p.speciate();
 	if(p.evaluate() == false){
 	    break;
-	}       
+	}
+	p.populationSize_ = (int) Math.round((double) initialSize * p.evaluations / evaluationsLimit_) + 1;
+	// if(p.evaluations/evaluationsLimit_ > 0.5){p.populationSize_ = 50;}
+	// if(p.evaluations/evaluationsLimit_ > 0.75){p.populationSize_ = 20;}
 	p.calculateNoOffspring();
 	p.generateNextGen();
 	i++;
